@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final int porta = 4580;
   final String user = 'Iago';
   final aux = StreamController();
-
+  bool isMic = true;
   Socket? socket;
   void connect() async {
     try {
@@ -64,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: currentTheme.isdark
-            ? const Color(0xff333333)
-            : const Color(0xff1FBD68),
+            ? const Color(0xff1C2D35)
+            : const Color(0xff075e55),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -82,12 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+      backgroundColor:
+          currentTheme.isdark ? const Color(0xff0F1C24) : Colors.white70,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
                 child: StreamBuilder(
@@ -96,16 +96,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     return ListView.builder(
                       itemCount: widget.rede.listMessages.length,
                       itemBuilder: ((context, index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: currentTheme.isdark
-                                ? const Color(0xff333333)
-                                : const Color(0xff1FBD68),
-                          ),
-                          child: Text(
-                            widget.rede.listMessages[index].mensagem,
-                            style: const TextStyle(
-                              color: Colors.white,
+                        return SizedBox(
+                          width: 20,
+                          child: Container(
+                            width: double.minPositive,
+                            decoration: BoxDecoration(
+                              color: currentTheme.isdark
+                                  ? const Color(0xff1C2D35)
+                                  : const Color(0xff1FBD68),
+                            ),
+                            child: Text(
+                              widget.rede.listMessages[index].mensagem,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         );
@@ -115,32 +119,69 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               const SizedBox(height: 24),
-              Form(
-                child: TextFormField(
-                  controller: _controller,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          sendMessage();
-                        },
-                        icon: const Icon(Icons.send)),
-                    labelText: 'Send a message',
-                    labelStyle: const TextStyle(
-                      color: Colors.white,
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: currentTheme.isdark
+                            ? Color(0xff1C2D35)
+                            : Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: TextFormField(
+                          onChanged: ((value) => setState(() {
+                                isMic = value.isEmpty ? true : false;
+                              })),
+                          controller: _controller,
+                          style: TextStyle(
+                            color: currentTheme.isdark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Mensagem',
+                            hintStyle: TextStyle(
+                              color: currentTheme.isdark
+                                  ? Color(0xff8097A1)
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xff03AA82),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                      ),
+                      child: IconButton(
+                        onPressed: (() {
+                          sendMessage();
+                        }),
+                        icon: Icon(
+                          isMic ? Icons.mic : Icons.send,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ],
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _sendMessage,
-      //   tooltip: 'Send message',
-      //   child: const Icon(Icons.send),
-      // ),
     );
   }
 
@@ -149,7 +190,10 @@ class _MyHomePageState extends State<MyHomePage> {
       var req = {};
       req['user'] = user;
       req['msg'] = _controller.text;
-      socket!.write(json.encode(req));
+      if (socket != null) {
+        socket!.write(json.encode(req));
+      }
+      _controller.text = '';
     }
   }
 

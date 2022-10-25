@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:socketfront/Pages/home_page.dart';
 import 'package:socketfront/Pages/Tab/whats_page.dart';
 import 'package:socketfront/config.dart';
 
+import '../Models/chat_model.dart';
 import '../Widgets/head_widget.dart';
 
-void main() {
-  runApp(TabBarDemo());
-}
-
 class TabBarDemo extends StatefulWidget {
-  TabBarDemo({super.key});
+  TabBarDemo({super.key, required this.chat});
+
+  Chat chat;
 
   @override
   State<TabBarDemo> createState() => _TabBarDemoState();
@@ -31,14 +28,13 @@ class _TabBarDemoState extends State<TabBarDemo> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      darkTheme: ThemeData.dark(),
       themeMode: currentTheme.currentTheme(),
       theme: ThemeData(
-        primaryColorLight: Colors.green,
         tabBarTheme: TabBarTheme(
           indicator: UnderlineTabIndicator(
             borderSide: BorderSide(
-                color: currentTheme.isdark ? Colors.green : Colors.blue),
+              color: currentTheme.isdark ? Colors.green : Colors.white,
+            ),
           ),
         ),
       ),

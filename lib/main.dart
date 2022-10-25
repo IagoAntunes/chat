@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socketfront/Pages/create_user_page.dart';
 import 'package:socketfront/Pages/tab_page.dart';
 
 void main() {
@@ -27,6 +28,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
           primaryColorLight: Colors.green,
         ),
-        home: TabBarDemo());
+        home: CreateUserPage());
   }
 }

@@ -92,17 +92,70 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
       appBar: AppBar(
         title: Text('Criar Sala'),
         backgroundColor:
-            currentTheme.isdark ? Color(0xff333333) : Color(0xff1FBD68),
+            currentTheme.isdark ? Color(0xff1C2D35) : Color(0xff075e55),
       ),
+      backgroundColor: currentTheme.isdark ? Color(0xff0F1C24) : Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.only(bottom: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color:
+                      currentTheme.isdark ? Color(0xff0F1C24) : Colors.white),
+              child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.camera_enhance,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                title: TextField(
+                  style: TextStyle(
+                    color: currentTheme.isdark ? Colors.white : Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Digite o nome do grupo...',
+                    hintStyle: TextStyle(
+                      color: currentTheme.isdark ? Colors.white : Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           TextField(
-            decoration: InputDecoration(hintText: 'PORT:'),
+            style: TextStyle(
+              color: currentTheme.isdark ? Colors.white : Colors.black,
+            ),
+            decoration: InputDecoration(
+              hintText: 'PORT:',
+              hintStyle: TextStyle(
+                color: currentTheme.isdark ? Colors.white : Colors.black,
+              ),
+            ),
             controller: controllerPort,
           ),
           TextField(
-            decoration: InputDecoration(hintText: 'HOST:'),
+            style: TextStyle(
+              color: currentTheme.isdark ? Colors.white : Colors.black,
+            ),
+            decoration: InputDecoration(
+              hintText: 'HOST:',
+              hintStyle: TextStyle(
+                color: currentTheme.isdark ? Colors.white : Colors.black,
+              ),
+            ),
             controller: controllerHost,
           ),
           Padding(
@@ -134,7 +187,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.create),
         backgroundColor:
-            currentTheme.isdark ? Color(0xff333333) : Color(0xff1FBD68),
+            currentTheme.isdark ? Color(0xff03AA82) : Color(0xff03AA82),
         onPressed: (() => iniServer(
               [controllerPort.text],
             )),

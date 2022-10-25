@@ -3,7 +3,7 @@ import 'package:socketfront/Pages/config_page.dart';
 import 'package:socketfront/config.dart';
 
 class HeadWidget extends StatelessWidget {
-  const HeadWidget({
+  HeadWidget({
     Key? key,
   }) : super(key: key);
 
@@ -11,10 +11,12 @@ class HeadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: currentTheme.isdark ? Color(0xff333333) : Color(0xff1FBD68)),
+        color: currentTheme.isdark ? Color(0xff1C2D35) : Color(0xff075e55),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,10 +24,11 @@ class HeadWidget extends StatelessWidget {
                 Text(
                   'WhatsApp',
                   style: TextStyle(
-                      color: currentTheme.isdark
-                          ? Color(0xffABABAB)
-                          : Colors.white,
-                      fontSize: 24),
+                    color:
+                        currentTheme.isdark ? Color(0xffABABAB) : Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Row(
                   children: [
@@ -74,42 +77,43 @@ class HeadWidget extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.only(top: 5),
               child: TabBar(
+                labelColor:
+                    currentTheme.isdark ? Color(0xff03AA82) : Colors.white,
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(
+                    width: 4.0,
+                    color:
+                        currentTheme.isdark ? Color(0xff03AA82) : Colors.white,
+                  ),
+                ),
+                unselectedLabelColor: currentTheme.isdark
+                    ? Color(0xff8097A1)
+                    : Colors.white.withOpacity(0.4),
+                labelStyle: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
                 tabs: [
                   Tab(
                     child: Text(
-                      'Conversas',
-                      style: TextStyle(
-                        color: currentTheme.isdark
-                            ? Color(0xffABABAB)
-                            : Colors.white,
-                      ),
+                      'CONVERSAS',
                     ),
                   ),
                   Tab(
                     child: Text(
-                      'Stories',
-                      style: TextStyle(
-                        color: currentTheme.isdark
-                            ? Color(0xffABABAB)
-                            : Colors.white,
-                      ),
+                      'STATUS',
                     ),
                   ),
                   Tab(
                     child: Text(
-                      'Chamadas',
-                      style: TextStyle(
-                        color: currentTheme.isdark
-                            ? Color(0xffABABAB)
-                            : Colors.white,
-                      ),
+                      'CHAMADAS',
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
