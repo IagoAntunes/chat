@@ -30,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Socket? socket;
   void connect() async {
     try {
+      print('Entrei');
       socket = await Socket.connect(widget.rede.host, widget.rede.porta)
           .then((socket) {
         print(
@@ -59,10 +60,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     connect();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            socket!.close();
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         backgroundColor: currentTheme.isdark
             ? const Color(0xff1C2D35)
             : const Color(0xff075e55),

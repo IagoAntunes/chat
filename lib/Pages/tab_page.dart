@@ -20,7 +20,7 @@ class _TabBarDemoState extends State<TabBarDemo> {
     super.initState();
     currentTheme.addListener(() {
       print('Change Theme');
-      setState(() {});
+      if (mounted) setState(() {});
     });
   }
 
