@@ -30,14 +30,13 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
       print('Usage: $filename <port>');
       return;
     }
-    // All connected sockets
+    // sockets conectados
     final Set<Socket> sockets = {};
 
-    // TCP server itself
+    // TCP server
     server = await ServerSocket.bind('0.0.0.0', int.parse(arguments[0]));
     print('// Launched server on port ${int.parse(arguments[0])}\n');
     server!.listen((socket) {
-      // Add fresh connected client to the list
       print('entrei ${sockets.length}');
       print(socket.remoteAddress);
       sockets.add(socket);
@@ -46,12 +45,12 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
         (packet) {
           var pack = utf8.decode(packet, allowMalformed: true).trim();
           try {
-            // Check if message is empty
+            // Ve se a mensagem esta vazia
             print(pack);
             var recv = json.decode(pack);
             if (recv['msg'] == '') {
             } else {
-              // Broadcast it to all connected cleints
+              // Todos usuarios conectados
               for (final s in sockets) {
                 s.add(utf8.encode(pack));
               }

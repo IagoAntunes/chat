@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:socketfront/config.dart';
 
+import '../Models/user_model.dart';
+
 class ConfigPage extends StatefulWidget {
   const ConfigPage({super.key});
 
@@ -10,6 +12,7 @@ class ConfigPage extends StatefulWidget {
 
 class _ConfigPageState extends State<ConfigPage> {
   bool isChecked = false;
+  User user = userProv.getUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +21,7 @@ class _ConfigPageState extends State<ConfigPage> {
       appBar: AppBar(
         backgroundColor: currentTheme.isdark
             ? const Color(0xff1C2D35)
-            : const Color(0xff1FBD68),
+            : const Color(0xff075e55),
         title: const Text('Configurações'),
       ),
       body: Column(
@@ -29,34 +32,37 @@ class _ConfigPageState extends State<ConfigPage> {
               color: currentTheme.isdark ? Colors.white : Colors.black,
             ),
             title: Text(
-              'Iago',
+              user.username,
               style: TextStyle(
                 color: currentTheme.isdark ? Colors.white : Colors.black,
               ),
             ),
             subtitle: Text(
-              'Teste teste teste',
+              user.description,
               style: TextStyle(
                 color: currentTheme.isdark ? Colors.white : Colors.black,
               ),
             ),
           ),
-          Row(
-            children: [
-              Icon(
-                currentTheme.isdark ? Icons.dark_mode : Icons.light_mode,
-                color: currentTheme.isdark ? Colors.white : Colors.black,
-              ),
-              Checkbox(
-                fillColor: MaterialStateProperty.all(
-                    currentTheme.isdark ? Colors.white : Colors.black),
-                value: isChecked,
-                onChanged: ((value) => setState(() {
-                      currentTheme.switchTheme();
-                      isChecked = !isChecked;
-                    })),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(left: 15),
+            child: Row(
+              children: [
+                Icon(
+                  currentTheme.isdark ? Icons.dark_mode : Icons.light_mode,
+                  color: currentTheme.isdark ? Colors.white : Colors.black,
+                ),
+                Checkbox(
+                  fillColor: MaterialStateProperty.all(
+                      currentTheme.isdark ? Colors.white : Colors.black),
+                  value: isChecked,
+                  onChanged: ((value) => setState(() {
+                        currentTheme.switchTheme();
+                        isChecked = !isChecked;
+                      })),
+                ),
+              ],
+            ),
           )
         ],
       ),

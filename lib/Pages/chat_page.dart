@@ -5,7 +5,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
+import 'package:socketfront/Providers/user_provider.dart';
 import 'package:socketfront/config.dart';
+
+import '../Models/user_model.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({super.key, required this.rede});
@@ -24,8 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final String host = '192.168.5.59';
   final int porta = 4580;
-  final String user = 'Iago';
   final aux = StreamController();
+  final User user = userProv.getUser;
   bool isMic = true;
   Socket? socket;
   void connect() async {
@@ -37,12 +40,18 @@ class _MyHomePageState extends State<MyHomePage> {
             'client connected : ${socket.remoteAddress.address}:${socket.remotePort}');
 
         socket.listen((data) {
+          print(data);
           aux.add(data);
           print(utf8.decode(data));
           if (utf8.decode(data) == 'Erro') {
           } else {
-            widget.rede.listMessages
-                .add(MessageModel.fromMap(json.decode(utf8.decode(data))));
+            widget.rede.listMessages.add(
+              MessageModel.fromMap(
+                json.decode(
+                  utf8.decode(data),
+                ),
+              ),
+            );
           }
 
           print("client listen  : ${String.fromCharCodes(data).trim()}");
@@ -71,10 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            socket!.close();
+            if (socket != null) {
+              socket!.close();
+            }
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
         ),
         backgroundColor: currentTheme.isdark
             ? const Color(0xff1C2D35)
@@ -84,10 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             const Text('Username'),
             Row(
-              children: [
-                const Icon(Icons.call),
-                const Icon(Icons.video_call),
-                const Icon(
+              children: const [
+                Icon(Icons.call),
+                Icon(Icons.video_call),
+                Icon(
                   Icons.menu_outlined,
                 )
               ],
@@ -95,41 +106,117 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      backgroundColor:
-          currentTheme.isdark ? const Color(0xff0F1C24) : Colors.white70,
+      backgroundColor: currentTheme.isdark
+          ? const Color(0xff0F1C24)
+          : Color.fromARGB(255, 237, 238, 190),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: StreamBuilder(
-                  stream: aux.stream,
-                  builder: (context, snapshot) {
-                    return ListView.builder(
+              StreamBuilder(
+                stream: aux.stream,
+                builder: (context, snapshot) {
+                  return Expanded(
+                    child: ListView.builder(
                       itemCount: widget.rede.listMessages.length,
                       itemBuilder: ((context, index) {
-                        return SizedBox(
-                          width: 20,
-                          child: Container(
-                            width: double.minPositive,
-                            decoration: BoxDecoration(
-                              color: currentTheme.isdark
-                                  ? const Color(0xff1C2D35)
-                                  : const Color(0xff1FBD68),
-                            ),
-                            child: Text(
-                              widget.rede.listMessages[index].mensagem,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Align(
+                            alignment: widget.rede.listMessages[index].user ==
+                                    user.username
+                                ? Alignment.bottomRight
+                                : Alignment.bottomLeft,
+                            child: Stack(
+                              children: [
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    minWidth: 90,
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: widget.rede.listMessages[index]
+                                                    .user ==
+                                                user.username
+                                            ? Radius.circular(10)
+                                            : Radius.circular(0),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: widget.rede
+                                                    .listMessages[index].user ==
+                                                user.username
+                                            ? Radius.circular(0)
+                                            : Radius.circular(10),
+                                      ),
+                                      color: currentTheme.isdark
+                                          ? const Color(0xff1C2D35)
+                                          : Colors.white,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                widget.rede.listMessages[index]
+                                                    .user,
+                                                style: TextStyle(
+                                                  color: Color(
+                                                    widget
+                                                        .rede
+                                                        .listMessages[index]
+                                                        .color,
+                                                  ),
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 15),
+                                            child: Text(
+                                              widget.rede.listMessages[index]
+                                                  .mensagem,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                color: currentTheme.isdark
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 5,
+                                  bottom: 2,
+                                  child: Text(
+                                    widget.rede.listMessages[index].time,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         );
                       }),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
               const SizedBox(height: 24),
               Row(
@@ -138,9 +225,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: currentTheme.isdark
-                            ? Color(0xff1C2D35)
+                            ? const Color(0xff1C2D35)
                             : Colors.white,
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(20),
                         ),
                       ),
@@ -161,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             hintText: 'Mensagem',
                             hintStyle: TextStyle(
                               color: currentTheme.isdark
-                                  ? Color(0xff8097A1)
+                                  ? const Color(0xff8097A1)
                                   : Colors.black,
                             ),
                           ),
@@ -172,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xff03AA82),
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
@@ -201,8 +288,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void sendMessage() {
     if (_controller.text.isNotEmpty) {
       var req = {};
-      req['user'] = user;
+      req['user'] = user.username;
       req['msg'] = _controller.text;
+      req['time'] = DateTime.now().toString().substring(11, 16);
+      req['color'] = user.color;
+      print(DateTime.now().toString().substring(11, 16));
       if (socket != null) {
         socket!.write(json.encode(req));
       }

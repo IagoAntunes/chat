@@ -13,10 +13,19 @@ class CreateUserPage extends StatefulWidget {
 }
 
 class _CreateUserPageState extends State<CreateUserPage> {
+  List<int> listColors = [
+    0xff0000ff,
+    0xffff0000,
+    0xffffcbdb,
+    0xff993399,
+    0xffffa500,
+    0xffffff00
+  ];
+  TextEditingController controllerUser = TextEditingController();
+  TextEditingController controllerDescription = TextEditingController();
+  int indexSelected = 0;
   @override
   Widget build(BuildContext context) {
-    TextEditingController controllerUser = TextEditingController();
-    TextEditingController controllerDescription = TextEditingController();
     return SafeArea(
       child: Scaffold(
         backgroundColor:
@@ -134,15 +143,54 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Container(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SizedBox(
+                        height: 30,
+                        child: ListView.separated(
+                          separatorBuilder: ((context, index) => SizedBox(
+                                width: 20,
+                              )),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: listColors.length,
+                          itemBuilder: ((context, index) {
+                            return GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  indexSelected = index;
+                                });
+                              }),
+                              child: Container(
+                                height: 20,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: Color(listColors[index]),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                  border: Border.all(
+                                    width: 2,
+                                    color: index == indexSelected
+                                        ? Colors.black
+                                        : Colors.black26,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
                     ),
+                    Expanded(child: Container()),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 30),
                       child: ElevatedButton(
                         onPressed: () {
                           if (controllerUser.text.isNotEmpty) {
-                            User user = User(username: controllerUser.text);
+                            User user = User(
+                                username: controllerUser.text,
+                                color: listColors[indexSelected]);
+                            userProv.setUser(user);
                             Chat chat = Chat(user: user);
                             Navigator.of(context).push(
                               MaterialPageRoute(

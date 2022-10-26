@@ -5,6 +5,8 @@ import 'package:socketfront/Pages/chat_page.dart';
 import 'package:socketfront/Pages/create_group.dart';
 import 'package:socketfront/config.dart';
 
+import '../../Models/user_model.dart';
+
 class WhatsPage extends StatefulWidget {
   const WhatsPage({super.key});
 
@@ -13,8 +15,8 @@ class WhatsPage extends StatefulWidget {
 }
 
 class _WhatsPageState extends State<WhatsPage> {
+  User user = userProv.getUser;
   List<RedeModel> listRedes = [];
-
   @override
   Widget build(BuildContext context) {
     TextEditingController controllerPorta = TextEditingController();
@@ -69,9 +71,21 @@ class _WhatsPageState extends State<WhatsPage> {
                     subtitle: Text(
                       listRedes[index].listMessages.isNotEmpty
                           ? listRedes[index]
-                              .listMessages[
-                                  listRedes[index].listMessages.length - 1]
-                              .mensagem
+                                      .listMessages[
+                                          listRedes[index].listMessages.length -
+                                              1]
+                                      .mensagem
+                                      .length >
+                                  20
+                              ? listRedes[index]
+                                  .listMessages[
+                                      listRedes[index].listMessages.length - 1]
+                                  .mensagem
+                                  .substring(0, 20)
+                              : listRedes[index]
+                                  .listMessages[
+                                      listRedes[index].listMessages.length - 1]
+                                  .mensagem
                           : '',
                       style: TextStyle(
                         color: currentTheme.isdark
