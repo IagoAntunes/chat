@@ -24,6 +24,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
   TextEditingController controllerUser = TextEditingController();
   TextEditingController controllerDescription = TextEditingController();
   int indexSelected = 0;
+  bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -181,29 +183,49 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         ),
                       ),
                     ),
-                    Expanded(child: Container()),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: isSelected,
+                          onChanged: (value) {
+                            setState(() {
+                              isSelected = !isSelected;
+                            });
+                          },
+                        ),
+                        Text(
+                          'Server',
+                          style: TextStyle(
+                            color: currentTheme.isdark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
+                      padding: const EdgeInsets.only(bottom: 30, top: 30),
                       child: ElevatedButton(
                         onPressed: () {
                           if (controllerUser.text.isNotEmpty) {
                             User user = User(
-                                username: controllerUser.text,
-                                color: listColors[indexSelected]);
+                              username: controllerUser.text,
+                              color: listColors[indexSelected],
+                              listRedes: [],
+                            );
                             userProv.setUser(user);
-                            Chat chat = Chat(user: user);
+                            Chat chat = Chat(user: user, isServer: isSelected);
+                            chatProv.setChat(chat);
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: ((context) => TabBarDemo(
-                                      chat: chat,
-                                    )),
+                                builder: ((context) => TabBarDemo()),
                               ),
                             );
                           }
                         },
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Text('Next'),
+                          child: Text(isSelected ? 'Login' : 'Next'),
                         ),
                       ),
                     ),

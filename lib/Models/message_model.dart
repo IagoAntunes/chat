@@ -19,7 +19,7 @@ class MessageModel {
       mensagem: data['msg']!,
       user: data['user']!,
       time: data['time'],
-      color: data['color'],
+      color: data['color'] ?? 1,
     );
     return message;
   }

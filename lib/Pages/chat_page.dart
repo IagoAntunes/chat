@@ -5,10 +5,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
+import 'package:socketfront/Pages/onlines_page.dart';
 import 'package:socketfront/Providers/user_provider.dart';
 import 'package:socketfront/config.dart';
 
+import '../Models/chat_model.dart';
 import '../Models/user_model.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({super.key, required this.rede});
@@ -30,7 +33,12 @@ class _MyHomePageState extends State<MyHomePage> {
   final aux = StreamController();
   final User user = userProv.getUser;
   bool isMic = true;
+  bool isConnected = false;
   Socket? socket;
+  late IO.Socket _socket;
+  Chat chat = chatProv.getChat;
+
+  //OLD CONNECT SERVER
   void connect() async {
     try {
       print('Entrei');
@@ -68,10 +76,55 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void connect3() {
+    _socket.connect();
+    _socket.onConnect((data) {
+      print('Connected');
+      _socket.emit('online', {
+        'user': user.username,
+      });
+    });
+    _socket.onConnectError((data) => print('Connect Error: $data'));
+    _socket.onDisconnect((data) {
+      print('Socket.IO server disconnected');
+    });
+    _socket.on('message', (data) {
+      if (mounted) {
+        setState(() {
+          widget.rede.listMessages.add(
+            MessageModel.fromMap(
+              data,
+            ),
+          );
+        });
+      }
+    });
+    _socket.on('online', (data) {
+      if (mounted) {
+        setState(() {
+          widget.rede.usersOnline = [];
+          for (var user in data) {
+            widget.rede.usersOnline!.add(user['user']);
+          }
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
-    connect();
     super.initState();
+    //Important: If your server is running on localhost and you are testing your app on Android then replace http://localhost:3000 with http://10.0.2.2:3000
+    if (chat.isServer == true) {
+      _socket = IO.io(
+        'http://192.168.5.213:4590',
+        IO.OptionBuilder().setTransports(['websocket']).setQuery(
+            {'username': userProv.user!.username.toString()}).build(),
+      );
+      connect3();
+    } else {
+      connect();
+    }
   }
 
   @override
@@ -83,7 +136,10 @@ class _MyHomePageState extends State<MyHomePage> {
             if (socket != null) {
               socket!.close();
             }
-            Navigator.pop(context);
+            if (chat.isServer) {
+              Navigator.pop(context);
+              _socket.disconnect();
+            }
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -95,11 +151,20 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             const Text('Username'),
             Row(
-              children: const [
+              children: [
                 Icon(Icons.call),
                 Icon(Icons.video_call),
-                Icon(
-                  Icons.menu_outlined,
+                IconButton(
+                  icon: Icon(Icons.online_prediction),
+                  onPressed: (() {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: ((context) => OnlinePage(
+                              rede: widget.rede,
+                            )),
+                      ),
+                    );
+                  }),
                 )
               ],
             )
@@ -267,7 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       child: IconButton(
                         onPressed: (() {
-                          sendMessage();
+                          chat.isServer ? sendMessageServer() : sendMessage();
                         }),
                         icon: Icon(
                           isMic ? Icons.mic : Icons.send,
@@ -283,6 +348,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  void sendMessageServer() {
+    if (_controller.text.isNotEmpty) {
+      _socket.emit('message', {
+        'msg': _controller.text.trim(),
+        'user': user.username,
+        'time': DateTime.now().toString().substring(11, 16).toString(),
+        'color': user.color,
+      });
+      _controller.clear();
+    }
   }
 
   void sendMessage() {

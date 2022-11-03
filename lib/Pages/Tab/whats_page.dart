@@ -17,6 +17,13 @@ class WhatsPage extends StatefulWidget {
 class _WhatsPageState extends State<WhatsPage> {
   User user = userProv.getUser;
   List<RedeModel> listRedes = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     TextEditingController controllerPorta = TextEditingController();
@@ -32,14 +39,14 @@ class _WhatsPageState extends State<WhatsPage> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: listRedes.length,
+                itemCount: user.listRedes.length,
                 itemBuilder: ((context, index) {
                   return ListTile(
                     onTap: () => Navigator.of(context)
                         .push(
                       MaterialPageRoute(
                         builder: ((context) =>
-                            MyHomePage(rede: listRedes[index])),
+                            MyHomePage(rede: user.listRedes[index])),
                       ),
                     )
                         .then((value) {
@@ -69,22 +76,27 @@ class _WhatsPageState extends State<WhatsPage> {
                       ),
                     ),
                     subtitle: Text(
-                      listRedes[index].listMessages.isNotEmpty
-                          ? listRedes[index]
-                                      .listMessages[
-                                          listRedes[index].listMessages.length -
-                                              1]
+                      user.listRedes[index].listMessages.isNotEmpty
+                          ? user
+                                      .listRedes[index]
+                                      .listMessages[user.listRedes[index]
+                                              .listMessages.length -
+                                          1]
                                       .mensagem
                                       .length >
                                   20
-                              ? listRedes[index]
-                                  .listMessages[
-                                      listRedes[index].listMessages.length - 1]
+                              ? user
+                                  .listRedes[index]
+                                  .listMessages[user.listRedes[index]
+                                          .listMessages.length -
+                                      1]
                                   .mensagem
                                   .substring(0, 20)
-                              : listRedes[index]
-                                  .listMessages[
-                                      listRedes[index].listMessages.length - 1]
+                              : user
+                                  .listRedes[index]
+                                  .listMessages[user.listRedes[index]
+                                          .listMessages.length -
+                                      1]
                                   .mensagem
                           : '',
                       style: TextStyle(
@@ -192,12 +204,12 @@ class _WhatsPageState extends State<WhatsPage> {
                               if (controllerPorta.text.isNotEmpty &&
                                   controllerHost.text.isNotEmpty) {
                                 RedeModel rede = RedeModel(
-                                  porta: int.parse(controllerPorta.text),
-                                  host: controllerHost.text,
-                                  listMessages: [],
-                                );
+                                    porta: int.parse(controllerPorta.text),
+                                    host: controllerHost.text,
+                                    listMessages: [],
+                                    usersOnline: []);
                                 setState(() {
-                                  listRedes.add(rede);
+                                  user.listRedes.add(rede);
                                 });
                                 Navigator.pop(context, rede);
                               }
@@ -238,7 +250,7 @@ class _WhatsPageState extends State<WhatsPage> {
                               );
                               if (rede != null) {
                                 setState(() {
-                                  listRedes.add(rede);
+                                  user.listRedes.add(rede);
                                 });
                                 print(rede.host);
                               }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:socketfront/Pages/Tab/whats_page.dart';
+import 'package:socketfront/Pages/status_page.dart';
 import 'package:socketfront/config.dart';
 
 import '../Models/chat_model.dart';
 import '../Widgets/head_widget.dart';
 
 class TabBarDemo extends StatefulWidget {
-  TabBarDemo({super.key, required this.chat});
-
-  Chat chat;
+  TabBarDemo({super.key});
 
   @override
   State<TabBarDemo> createState() => _TabBarDemoState();
@@ -49,7 +48,7 @@ class _TabBarDemoState extends State<TabBarDemo> {
                   child: TabBarView(
                     children: [
                       WhatsPage(),
-                      Icon(Icons.directions_bike),
+                      StatusPage(),
                       Column(
                         children: [
                           Icon(
