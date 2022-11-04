@@ -28,7 +28,7 @@ class OnlinePage extends StatelessWidget {
               color: Colors.green,
             ),
             title: Text(
-              rede.usersOnline![index],
+              rede.usersOnline![index].user,
               style: TextStyle(
                 color: currentTheme.isdark ? Colors.white : Colors.black,
               ),

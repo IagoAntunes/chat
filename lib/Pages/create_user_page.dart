@@ -212,6 +212,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                               username: controllerUser.text,
                               color: listColors[indexSelected],
                               listRedes: [],
+                              isOnline: true,
+                              listMessages: [],
                             );
                             userProv.setUser(user);
                             Chat chat = Chat(user: user, isServer: isSelected);

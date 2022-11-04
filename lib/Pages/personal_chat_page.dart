@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
+import 'package:socketfront/Models/user_private_model.dart';
 import 'package:socketfront/Pages/onlines_page.dart';
 import 'package:socketfront/Providers/user_provider.dart';
 import 'package:socketfront/config.dart';
@@ -13,19 +14,22 @@ import '../Models/chat_model.dart';
 import '../Models/user_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.rede, required this.socket});
+class PersonalPage extends StatefulWidget {
+  PersonalPage({
+    super.key,
+    required this.rede,
+    required this.socket,
+    required this.user,
+  });
   IO.Socket socket;
   RedeModel rede;
+  UserPrivate user;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<PersonalPage> createState() => PersonalPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class PersonalPageState extends State<PersonalPage> {
   final TextEditingController _controller = TextEditingController();
-  // final _channel = WebSocketChannel.connect(
-  //   Uri.parse('wss://192.168.5.213:4580'),
-  // );
 
   final String host = '192.168.5.59';
   final int porta = 4580;
@@ -35,44 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isConnected = false;
   Socket? socket;
   Chat chat = chatProv.getChat;
-
-  //OLD CONNECT SERVER
-  void connect() async {
-    try {
-      print('Entrei');
-      socket = await Socket.connect(widget.rede.host, widget.rede.porta)
-          .then((socket) {
-        print(
-            'client connected : ${socket.remoteAddress.address}:${socket.remotePort}');
-
-        socket.listen((data) {
-          print(data);
-          aux.add(data);
-          print(utf8.decode(data));
-          if (utf8.decode(data) == 'Erro') {
-          } else {
-            widget.rede.listMessages.add(
-              MessageModel.fromMap(
-                json.decode(
-                  utf8.decode(data),
-                ),
-              ),
-            );
-          }
-
-          print("client listen  : ${String.fromCharCodes(data).trim()}");
-        }, onDone: () {
-          print("client done");
-          socket.destroy();
-        });
-        return socket;
-      });
-    } on SocketException catch (e) {
-      print(
-          'Couldn\'t connect with the specified host:port combination. Aborting.');
-      return;
-    }
-  }
 
   void connect3() {
     widget.socket.connect();
@@ -112,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    print(widget.rede.listMessages.length);
   }
 
   @override
@@ -126,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
             }
             if (chat.isServer) {
               Navigator.pop(context);
-              // widget.socket.disconnect();
             }
           },
           icon: const Icon(Icons.arrow_back),
@@ -173,12 +137,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context, snapshot) {
                   return Expanded(
                     child: ListView.builder(
-                      itemCount: widget.rede.listMessages.length,
+                      itemCount: widget.user.listMessages.length,
                       itemBuilder: ((context, index) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: Align(
-                            alignment: widget.rede.listMessages[index].user ==
+                            alignment: widget.user.listMessages[index].user ==
                                     user.username
                                 ? Alignment.bottomRight
                                 : Alignment.bottomLeft,
@@ -191,14 +155,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.only(
-                                        topLeft: widget.rede.listMessages[index]
+                                        topLeft: widget.user.listMessages[index]
                                                     .user ==
                                                 user.username
                                             ? Radius.circular(10)
                                             : Radius.circular(0),
                                         topRight: Radius.circular(10),
                                         bottomLeft: Radius.circular(10),
-                                        bottomRight: widget.rede
+                                        bottomRight: widget.user
                                                     .listMessages[index].user ==
                                                 user.username
                                             ? Radius.circular(0)
@@ -218,12 +182,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
-                                                widget.rede.listMessages[index]
+                                                widget.user.listMessages[index]
                                                     .user,
                                                 style: TextStyle(
                                                   color: Color(
                                                     widget
-                                                        .rede
+                                                        .user
                                                         .listMessages[index]
                                                         .color,
                                                   ),
@@ -236,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             padding: const EdgeInsets.only(
                                                 bottom: 15),
                                             child: Text(
-                                              widget.rede.listMessages[index]
+                                              widget.user.listMessages[index]
                                                   .mensagem,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
@@ -255,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   right: 5,
                                   bottom: 2,
                                   child: Text(
-                                    widget.rede.listMessages[index].time,
+                                    widget.user.listMessages[index].time,
                                     style: const TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey,
@@ -320,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       child: IconButton(
                         onPressed: (() {
-                          chat.isServer ? sendMessageServer() : sendMessage();
+                          sendMessageServer();
                         }),
                         icon: Icon(
                           isMic ? Icons.mic : Icons.send,
@@ -339,36 +303,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void sendMessageServer() {
-    if (_controller.text.isNotEmpty) {
-      widget.socket.emit('message', {
-        'msg': _controller.text.trim(),
-        'user': user.username,
-        'time': DateTime.now().toString().substring(11, 16).toString(),
-        'color': user.color,
-      });
-      _controller.clear();
-    }
-  }
+    setState(() {
+      widget.user.listMessages.add(MessageModel(
+        mensagem: _controller.text,
+        user: chat.user.username,
+        time: DateTime.now().toString().substring(11, 16).toString(),
+        color: chat.user.color,
+      ));
+    });
 
-  void sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      var req = {};
-      req['user'] = user.username;
-      req['msg'] = _controller.text;
-      req['time'] = DateTime.now().toString().substring(11, 16);
-      req['color'] = user.color;
-      print(DateTime.now().toString().substring(11, 16));
-      if (socket != null) {
-        socket!.write(json.encode(req));
-      }
-      _controller.text = '';
-    }
+    widget.socket.emit("private message", {
+      'msg': _controller.text,
+      'to': widget.user.userId,
+      'time': DateTime.now().toString().substring(11, 16).toString(),
+      'color': user.color,
+    });
   }
 
   @override
   void dispose() {
-    // _channel.sink.close();
-    // _controller.dispose();
     super.dispose();
   }
 }

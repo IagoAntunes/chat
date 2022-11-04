@@ -4,23 +4,35 @@ import 'package:socketfront/Models/rede_model.dart';
 import 'package:socketfront/Pages/chat_page.dart';
 import 'package:socketfront/Pages/create_group.dart';
 import 'package:socketfront/config.dart';
-
+import '../../Models/chat_model.dart';
+import '../../Models/message_model.dart';
 import '../../Models/user_model.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class WhatsPage extends StatefulWidget {
-  const WhatsPage({super.key});
+  WhatsPage({
+    super.key,
+    required this.rede,
+    required this.socket,
+  });
 
+  IO.Socket socket;
+  RedeModel rede;
   @override
   State<WhatsPage> createState() => _WhatsPageState();
 }
 
 class _WhatsPageState extends State<WhatsPage> {
   User user = userProv.getUser;
+  Chat chat = chatProv.getChat;
   List<RedeModel> listRedes = [];
 
   @override
   void initState() {
-    // TODO: implement initState
+    if (user.listRedes.isEmpty) {
+      user.listRedes.add(widget.rede);
+    }
+
     super.initState();
   }
 
@@ -45,8 +57,10 @@ class _WhatsPageState extends State<WhatsPage> {
                     onTap: () => Navigator.of(context)
                         .push(
                       MaterialPageRoute(
-                        builder: ((context) =>
-                            MyHomePage(rede: user.listRedes[index])),
+                        builder: ((context) => MyHomePage(
+                              rede: user.listRedes[index],
+                              socket: widget.socket,
+                            )),
                       ),
                     )
                         .then((value) {
