@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socketfront/Models/chat_model.dart';
 
-import '../Models/user_model.dart';
-
-class chatProvider extends ChangeNotifier {
+class ChatProvider extends ChangeNotifier {
   Chat? chat;
 
   get getChat {

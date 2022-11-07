@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:socketfront/config.dart';
-
-import '../Models/user_model.dart';
+import 'package:socketfront/Pages/CreateUser/create_user_page.dart';
+import 'package:socketfront/Config/config.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import '../../../Models/chat_model.dart';
+import '../../../Models/user_model.dart';
 
 class ConfigPage extends StatefulWidget {
-  const ConfigPage({super.key});
-
+  const ConfigPage({super.key, this.socket});
+  final IO.Socket? socket;
   @override
   State<ConfigPage> createState() => _ConfigPageState();
 }
@@ -13,6 +15,7 @@ class ConfigPage extends StatefulWidget {
 class _ConfigPageState extends State<ConfigPage> {
   bool isChecked = false;
   User user = userProv.getUser;
+  Chat chat = chatProv.getChat;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +66,25 @@ class _ConfigPageState extends State<ConfigPage> {
                 ),
               ],
             ),
-          )
+          ),
+          Visibility(
+            visible: chat.isServer,
+            child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(width: 1, color: Colors.red),
+                  foregroundColor: Colors.red,
+                ),
+                onPressed: (() {
+                  widget.socket!.disconnect();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => const CreateUserPage()),
+                    ),
+                  );
+                }),
+                child: const Text('Disconnect')),
+          ),
         ],
       ),
     );

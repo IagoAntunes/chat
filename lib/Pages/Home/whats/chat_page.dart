@@ -6,22 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
 import 'package:socketfront/Pages/onlines_page.dart';
-import 'package:socketfront/Providers/user_provider.dart';
-import 'package:socketfront/config.dart';
+import 'package:socketfront/Config/config.dart';
 
-import '../Models/chat_model.dart';
-import '../Models/user_model.dart';
+import '../../../Models/chat_model.dart';
+import '../../../Models/user_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({super.key, required this.rede, required this.socket});
-  IO.Socket socket;
-  RedeModel rede;
+class ChatPage extends StatefulWidget {
+  const ChatPage({super.key, required this.rede, this.socket});
+  final IO.Socket? socket;
+  final RedeModel rede;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ChatPageState extends State<ChatPage> {
   final TextEditingController _controller = TextEditingController();
   // final _channel = WebSocketChannel.connect(
   //   Uri.parse('wss://192.168.5.213:4580'),
@@ -75,18 +74,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void connect3() {
-    widget.socket.connect();
-    widget.socket.onConnect((data) {
+    widget.socket!.connect();
+    widget.socket!.onConnect((data) {
       print('Connected');
-      widget.socket.emit('online', {
+      widget.socket!.emit('online', {
         'user': user.username,
       });
     });
-    widget.socket.onConnectError((data) => print('Connect Error: $data'));
-    widget.socket.onDisconnect((data) {
+    widget.socket!.onConnectError((data) => print('Connect Error: $data'));
+    widget.socket!.onDisconnect((data) {
       print('Socket.IO server disconnected');
     });
-    widget.socket.on('message', (data) {
+    widget.socket!.on('message', (data) {
       if (mounted) {
         setState(() {
           widget.rede.listMessages.add(
@@ -97,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
         });
       }
     });
-    widget.socket.on('online', (data) {
+    widget.socket!.on('online', (data) {
       if (mounted) {
         setState(() {
           widget.rede.usersOnline = [];
@@ -112,6 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    if (!chat.isServer) {
+      connect();
+    }
     print(widget.rede.listMessages.length);
   }
 
@@ -123,6 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             if (socket != null) {
               socket!.close();
+              Navigator.pop(context);
             }
             if (chat.isServer) {
               Navigator.pop(context);
@@ -140,10 +143,10 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text('Username'),
             Row(
               children: [
-                Icon(Icons.call),
-                Icon(Icons.video_call),
+                const Icon(Icons.call),
+                const Icon(Icons.video_call),
                 IconButton(
-                  icon: Icon(Icons.online_prediction),
+                  icon: const Icon(Icons.online_prediction),
                   onPressed: (() {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -161,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       backgroundColor: currentTheme.isdark
           ? const Color(0xff0F1C24)
-          : Color.fromARGB(255, 237, 238, 190),
+          : const Color.fromARGB(255, 237, 238, 190),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -194,15 +197,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                         topLeft: widget.rede.listMessages[index]
                                                     .user ==
                                                 user.username
-                                            ? Radius.circular(10)
-                                            : Radius.circular(0),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
+                                            ? const Radius.circular(10)
+                                            : const Radius.circular(0),
+                                        topRight: const Radius.circular(10),
+                                        bottomLeft: const Radius.circular(10),
                                         bottomRight: widget.rede
                                                     .listMessages[index].user ==
                                                 user.username
-                                            ? Radius.circular(0)
-                                            : Radius.circular(10),
+                                            ? const Radius.circular(0)
+                                            : const Radius.circular(10),
                                       ),
                                       color: currentTheme.isdark
                                           ? const Color(0xff1C2D35)
@@ -340,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void sendMessageServer() {
     if (_controller.text.isNotEmpty) {
-      widget.socket.emit('message', {
+      widget.socket!.emit('message', {
         'msg': _controller.text.trim(),
         'user': user.username,
         'time': DateTime.now().toString().substring(11, 16).toString(),

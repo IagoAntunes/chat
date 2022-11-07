@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../Models/user_model.dart';
 
-class userProvider extends ChangeNotifier {
+class UserProvider extends ChangeNotifier {
   User? user;
 
   get getUser {
@@ -11,5 +11,6 @@ class userProvider extends ChangeNotifier {
 
   void setUser(User userSet) {
     user = userSet;
+    notifyListeners();
   }
 }

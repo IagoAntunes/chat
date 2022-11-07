@@ -1,10 +1,8 @@
-import 'package:flutter/animation.dart';
 import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
 
 class User {
   String userID;
-
   String username;
   String description;
   int color;

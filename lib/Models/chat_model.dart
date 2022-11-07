@@ -1,4 +1,3 @@
-import 'package:socketfront/Models/rede_model.dart';
 import 'package:socketfront/Models/user_model.dart';
 
 class Chat {

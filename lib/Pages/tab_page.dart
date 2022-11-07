@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+// ignore: library_prefixes
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 import 'package:socketfront/Models/user_private_model.dart';
-import 'package:socketfront/Pages/Tab/whats_page.dart';
-import 'package:socketfront/Pages/status_page.dart';
-import 'package:socketfront/config.dart';
+import 'package:socketfront/Pages/Home/status/status_page.dart';
+import 'package:socketfront/Pages/Home/whats/whats_page.dart';
+import 'package:socketfront/Config/config.dart';
 
 import '../Models/chat_model.dart';
 import '../Models/message_model.dart';
 import '../Models/rede_model.dart';
 import '../Models/user_model.dart';
 import '../Widgets/head_widget.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class TabBarDemo extends StatefulWidget {
   TabBarDemo({super.key});
-  RedeModel rede = RedeModel(
+  final RedeModel rede = RedeModel(
     porta: 111,
     host: '111',
     listMessages: [],
@@ -25,21 +27,21 @@ class TabBarDemo extends StatefulWidget {
 
 class _TabBarDemoState extends State<TabBarDemo> {
   User user = userProv.getUser;
-  late IO.Socket _socket;
+  IO.Socket? _socket;
   Chat chat = chatProv.getChat;
   List<RedeModel> listRedes = [];
   void connect3() {
-    _socket.onConnect((data) {
+    _socket!.onConnect((data) {
       print('Connected');
-      _socket.emit('online', {
+      _socket!.emit('online', {
         'user': user.username,
       });
     });
-    _socket.onConnectError((data) => print('Connect Error: $data'));
-    _socket.onDisconnect((data) {
+    _socket!.onConnectError((data) => print('Connect Error: $data'));
+    _socket!.onDisconnect((data) {
       print('Socket.IO server disconnected');
     });
-    _socket.on('message', (data) {
+    _socket!.on('message', (data) {
       if (mounted) {
         setState(() {
           widget.rede.listMessages.add(
@@ -50,7 +52,7 @@ class _TabBarDemoState extends State<TabBarDemo> {
         });
       }
     });
-    _socket.on("private message", (data) {
+    _socket!.on("private message", (data) {
       for (var i = 0; i < widget.rede.usersOnline!.length; i++) {
         if (widget.rede.usersOnline![i].userId == data['from']) {
           setState(() {
@@ -68,7 +70,7 @@ class _TabBarDemoState extends State<TabBarDemo> {
       }
     });
     //Recebe usuarios que entrar ou desconectar
-    _socket.on('users', (data) {
+    _socket!.on('users', (data) {
       widget.rede.usersOnline = [];
       for (var user in data) {
         setState(() {
@@ -124,19 +126,16 @@ class _TabBarDemoState extends State<TabBarDemo> {
           body: SafeArea(
             child: Column(
               children: [
-                OutlinedButton(
-                    onPressed: (() {
-                      _socket.ondisconnect();
-                    }),
-                    child: Text('oi')),
-                HeadWidget(),
+                HeadWidget(
+                  socket: _socket,
+                ),
                 Expanded(
                   child: TabBarView(
                     children: [
                       WhatsPage(rede: widget.rede, socket: _socket),
                       StatusPage(rede: widget.rede, socket: _socket),
                       Column(
-                        children: [
+                        children: const [
                           Icon(
                             Icons.call,
                             size: 120,

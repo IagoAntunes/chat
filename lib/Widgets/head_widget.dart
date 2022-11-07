@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:socketfront/Pages/config_page.dart';
-import 'package:socketfront/config.dart';
+import 'package:socketfront/Pages/Home/config/config_page.dart';
+import 'package:socketfront/Config/config.dart';
+// ignore: library_prefixes
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import '../Models/chat_model.dart';
 
 class HeadWidget extends StatelessWidget {
-  HeadWidget({
-    Key? key,
-  }) : super(key: key);
-
+  HeadWidget({Key? key, this.socket}) : super(key: key);
+  final IO.Socket? socket;
+  final Chat chat = chatProv.getChat;
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: currentTheme.isdark ? Color(0xff1C2D35) : Color(0xff075e55),
+        color: currentTheme.isdark
+            ? const Color(0xff1C2D35)
+            : const Color(0xff075e55),
       ),
       child: Padding(
         padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -24,8 +28,9 @@ class HeadWidget extends StatelessWidget {
                 Text(
                   'WhatsApp',
                   style: TextStyle(
-                    color:
-                        currentTheme.isdark ? Color(0xffABABAB) : Colors.white,
+                    color: currentTheme.isdark
+                        ? const Color(0xffABABAB)
+                        : Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -35,11 +40,11 @@ class HeadWidget extends StatelessWidget {
                     Icon(
                       Icons.search,
                       color: currentTheme.isdark
-                          ? Color(0xffABABAB)
+                          ? const Color(0xffABABAB)
                           : Colors.white,
                     ),
                     PopupMenuButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.menu,
                         color: Colors.white,
                       ),
@@ -54,7 +59,11 @@ class HeadWidget extends StatelessWidget {
                         if (value == 1) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: ((context) => ConfigPage()),
+                              builder: ((context) => chat.isServer
+                                  ? ConfigPage(
+                                      socket: socket,
+                                    )
+                                  : const ConfigPage()),
                             ),
                           );
                         }
@@ -79,23 +88,25 @@ class HeadWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: TabBar(
-                labelColor:
-                    currentTheme.isdark ? Color(0xff03AA82) : Colors.white,
+                labelColor: currentTheme.isdark
+                    ? const Color(0xff03AA82)
+                    : Colors.white,
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(
                     width: 4.0,
-                    color:
-                        currentTheme.isdark ? Color(0xff03AA82) : Colors.white,
+                    color: currentTheme.isdark
+                        ? const Color(0xff03AA82)
+                        : Colors.white,
                   ),
                 ),
                 unselectedLabelColor: currentTheme.isdark
-                    ? Color(0xff8097A1)
+                    ? const Color(0xff8097A1)
                     : Colors.white.withOpacity(0.4),
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
-                tabs: [
+                tabs: const [
                   Tab(
                     child: Text(
                       'CONVERSAS',

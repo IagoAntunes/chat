@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 class MessageModel {
   String user;
   String mensagem;

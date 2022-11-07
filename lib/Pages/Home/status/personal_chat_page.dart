@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,23 +6,22 @@ import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
 import 'package:socketfront/Models/user_private_model.dart';
 import 'package:socketfront/Pages/onlines_page.dart';
-import 'package:socketfront/Providers/user_provider.dart';
-import 'package:socketfront/config.dart';
+import 'package:socketfront/Config/config.dart';
 
-import '../Models/chat_model.dart';
-import '../Models/user_model.dart';
+import '../../../Models/chat_model.dart';
+import '../../../Models/user_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class PersonalPage extends StatefulWidget {
-  PersonalPage({
+  const PersonalPage({
     super.key,
     required this.rede,
     required this.socket,
     required this.user,
   });
-  IO.Socket socket;
-  RedeModel rede;
-  UserPrivate user;
+  final IO.Socket socket;
+  final RedeModel rede;
+  final UserPrivate user;
   @override
   State<PersonalPage> createState() => PersonalPageState();
 }
@@ -104,10 +102,10 @@ class PersonalPageState extends State<PersonalPage> {
             const Text('Username'),
             Row(
               children: [
-                Icon(Icons.call),
-                Icon(Icons.video_call),
+                const Icon(Icons.call),
+                const Icon(Icons.video_call),
                 IconButton(
-                  icon: Icon(Icons.online_prediction),
+                  icon: const Icon(Icons.online_prediction),
                   onPressed: (() {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -125,7 +123,7 @@ class PersonalPageState extends State<PersonalPage> {
       ),
       backgroundColor: currentTheme.isdark
           ? const Color(0xff0F1C24)
-          : Color.fromARGB(255, 237, 238, 190),
+          : const Color.fromARGB(255, 237, 238, 190),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -158,15 +156,15 @@ class PersonalPageState extends State<PersonalPage> {
                                         topLeft: widget.user.listMessages[index]
                                                     .user ==
                                                 user.username
-                                            ? Radius.circular(10)
-                                            : Radius.circular(0),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
+                                            ? const Radius.circular(10)
+                                            : const Radius.circular(0),
+                                        topRight: const Radius.circular(10),
+                                        bottomLeft: const Radius.circular(10),
                                         bottomRight: widget.user
                                                     .listMessages[index].user ==
                                                 user.username
-                                            ? Radius.circular(0)
-                                            : Radius.circular(10),
+                                            ? const Radius.circular(0)
+                                            : const Radius.circular(10),
                                       ),
                                       color: currentTheme.isdark
                                           ? const Color(0xff1C2D35)

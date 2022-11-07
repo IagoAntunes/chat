@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:socketfront/config.dart';
+import 'package:socketfront/Config/config.dart';
+import 'package:socketfront/Widgets/input_widget.dart';
 
 import '../Models/rede_model.dart';
 
@@ -89,11 +90,13 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criar Sala'),
-        backgroundColor:
-            currentTheme.isdark ? Color(0xff1C2D35) : Color(0xff075e55),
+        title: const Text('Criar Sala'),
+        backgroundColor: currentTheme.isdark
+            ? const Color(0xff1C2D35)
+            : const Color(0xff075e55),
       ),
-      backgroundColor: currentTheme.isdark ? Color(0xff0F1C24) : Colors.white,
+      backgroundColor:
+          currentTheme.isdark ? const Color(0xff0F1C24) : Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -101,18 +104,19 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               decoration: BoxDecoration(
-                  color:
-                      currentTheme.isdark ? Color(0xff0F1C24) : Colors.white),
+                  color: currentTheme.isdark
+                      ? const Color(0xff0F1C24)
+                      : Colors.white),
               child: ListTile(
                 leading: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.all(
                       Radius.circular(20),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Icon(
                       Icons.camera_enhance,
                       color: Colors.white,
@@ -133,40 +137,28 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
               ),
             ),
           ),
-          TextField(
-            style: TextStyle(
-              color: currentTheme.isdark ? Colors.white : Colors.black,
-            ),
-            decoration: InputDecoration(
-              hintText: 'PORT:',
-              hintStyle: TextStyle(
-                color: currentTheme.isdark ? Colors.white : Colors.black,
-              ),
-            ),
-            controller: controllerPort,
+          CustomInput(
+            controllerDescription: controllerPort,
+            hintText: 'PORT:',
+            icon: Icons.door_sliding,
+            value: currentTheme.isdark,
           ),
-          TextField(
-            style: TextStyle(
-              color: currentTheme.isdark ? Colors.white : Colors.black,
-            ),
-            decoration: InputDecoration(
-              hintText: 'HOST:',
-              hintStyle: TextStyle(
-                color: currentTheme.isdark ? Colors.white : Colors.black,
-              ),
-            ),
-            controller: controllerHost,
+          CustomInput(
+            controllerDescription: controllerHost,
+            hintText: 'HOST:',
+            icon: Icons.access_alarm,
+            value: currentTheme.isdark,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20),
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: Colors.red),
+                side: const BorderSide(color: Colors.red),
               ),
               onPressed: (() => closeGroup()),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: const [
                   Icon(
                     Icons.delete,
                     color: Colors.red,
@@ -184,12 +176,13 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.create),
-        backgroundColor:
-            currentTheme.isdark ? Color(0xff03AA82) : Color(0xff03AA82),
+        backgroundColor: currentTheme.isdark
+            ? const Color(0xff03AA82)
+            : const Color(0xff03AA82),
         onPressed: (() => iniServer(
               [controllerPort.text],
             )),
+        child: const Icon(Icons.create),
       ),
     );
   }
