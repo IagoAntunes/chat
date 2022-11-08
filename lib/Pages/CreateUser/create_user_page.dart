@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:socketfront/Pages/CreateUser/widgets/custom_buton_next.dart';
+import 'package:socketfront/Pages/CreateUser/widgets/custom_buton_widget.dart';
 import 'package:socketfront/Providers/theme_provider.dart';
 import '../../Config/config.dart';
 import '../../Widgets/input_widget.dart';
+import 'widgets/foto_user_widget.dart';
 import 'widgets/head_widget.dart';
 
 class CreateUserPage extends StatefulWidget {
@@ -18,9 +19,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
   TextEditingController controllerDescription = TextEditingController();
   int indexSelected = 0;
   bool isSelected = false;
-
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Consumer<ThemeProvider>(
       builder: ((context, value, child) => SafeArea(
             child: Scaffold(
@@ -30,24 +31,9 @@ class _CreateUserPageState extends State<CreateUserPage> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Head(
-                    isDark: value.isdark,
+                    value: value,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(15.0),
-                      child: Icon(
-                        Icons.camera_enhance_sharp,
-                        color: Colors.grey,
-                        size: 70,
-                      ),
-                    ),
-                  ),
+                  const FotoUser(),
                   Expanded(
                     child: Column(
                       children: [
@@ -66,7 +52,7 @@ class _CreateUserPageState extends State<CreateUserPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: SizedBox(
-                            height: 30,
+                            height: size.height * 0.05,
                             child: ListView.separated(
                               separatorBuilder: ((context, index) =>
                                   const SizedBox(
@@ -82,8 +68,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                     });
                                   }),
                                   child: Container(
-                                    height: 20,
-                                    width: 30,
+                                    height: size.height * 0.02,
+                                    width: size.width * 0.07,
                                     decoration: BoxDecoration(
                                       color: Color(listColors[index]),
                                       borderRadius: const BorderRadius.all(

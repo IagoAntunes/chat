@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:socketfront/Pages/CreateUser/create_user_page.dart';
 import 'package:socketfront/Config/config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socketfront/Pages/Home/config/widgets/disconnect_button_widget.dart';
 import '../../../Models/chat_model.dart';
 import '../../../Models/user_model.dart';
+import 'widgets/checkbox_theme_widget.dart';
+import 'widgets/tile_profile_widget.dart';
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage({super.key, this.socket});
@@ -29,61 +32,11 @@ class _ConfigPageState extends State<ConfigPage> {
       ),
       body: Column(
         children: [
-          ListTile(
-            leading: Icon(
-              Icons.person,
-              color: currentTheme.isdark ? Colors.white : Colors.black,
-            ),
-            title: Text(
-              user.username,
-              style: TextStyle(
-                color: currentTheme.isdark ? Colors.white : Colors.black,
-              ),
-            ),
-            subtitle: Text(
-              user.description,
-              style: TextStyle(
-                color: currentTheme.isdark ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Row(
-              children: [
-                Icon(
-                  currentTheme.isdark ? Icons.dark_mode : Icons.light_mode,
-                  color: currentTheme.isdark ? Colors.white : Colors.black,
-                ),
-                Checkbox(
-                  fillColor: MaterialStateProperty.all(
-                      currentTheme.isdark ? Colors.white : Colors.black),
-                  value: isChecked,
-                  onChanged: ((value) => setState(() {
-                        currentTheme.switchTheme();
-                        isChecked = !isChecked;
-                      })),
-                ),
-              ],
-            ),
-          ),
+          TileProfile(user: user),
+          CheckBoxTheme(isChecked: isChecked),
           Visibility(
             visible: chat.isServer,
-            child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(width: 1, color: Colors.red),
-                  foregroundColor: Colors.red,
-                ),
-                onPressed: (() {
-                  widget.socket!.disconnect();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) => const CreateUserPage()),
-                    ),
-                  );
-                }),
-                child: const Text('Disconnect')),
+            child: DisconnectButton(widget: widget),
           ),
         ],
       ),

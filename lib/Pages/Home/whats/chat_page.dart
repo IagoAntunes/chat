@@ -12,6 +12,10 @@ import '../../../Models/chat_model.dart';
 import '../../../Models/user_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import 'widgets/appbar_chat.dart';
+import 'widgets/input_chat_widget.dart';
+import 'widgets/list_messages_widget.dart';
+
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key, required this.rede, this.socket});
   final IO.Socket? socket;
@@ -22,10 +26,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _controller = TextEditingController();
-  // final _channel = WebSocketChannel.connect(
-  //   Uri.parse('wss://192.168.5.213:4580'),
-  // );
-
   final String host = '192.168.5.59';
   final int porta = 4580;
   final aux = StreamController();
@@ -120,48 +120,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            if (socket != null) {
-              socket!.close();
-              Navigator.pop(context);
-            }
-            if (chat.isServer) {
-              Navigator.pop(context);
-              // widget.socket.disconnect();
-            }
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
-        backgroundColor: currentTheme.isdark
-            ? const Color(0xff1C2D35)
-            : const Color(0xff075e55),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text('Username'),
-            Row(
-              children: [
-                const Icon(Icons.call),
-                const Icon(Icons.video_call),
-                IconButton(
-                  icon: const Icon(Icons.online_prediction),
-                  onPressed: (() {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: ((context) => OnlinePage(
-                              rede: widget.rede,
-                            )),
-                      ),
-                    );
-                  }),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+      appBar: AppBarChat(socket: socket, chat: chat, widget: widget),
       backgroundColor: currentTheme.isdark
           ? const Color(0xff0F1C24)
           : const Color.fromARGB(255, 237, 238, 190),
@@ -171,168 +130,14 @@ class _ChatPageState extends State<ChatPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StreamBuilder(
-                stream: aux.stream,
-                builder: (context, snapshot) {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: widget.rede.listMessages.length,
-                      itemBuilder: ((context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Align(
-                            alignment: widget.rede.listMessages[index].user ==
-                                    user.username
-                                ? Alignment.bottomRight
-                                : Alignment.bottomLeft,
-                            child: Stack(
-                              children: [
-                                ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    minWidth: 90,
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: widget.rede.listMessages[index]
-                                                    .user ==
-                                                user.username
-                                            ? const Radius.circular(10)
-                                            : const Radius.circular(0),
-                                        topRight: const Radius.circular(10),
-                                        bottomLeft: const Radius.circular(10),
-                                        bottomRight: widget.rede
-                                                    .listMessages[index].user ==
-                                                user.username
-                                            ? const Radius.circular(0)
-                                            : const Radius.circular(10),
-                                      ),
-                                      color: currentTheme.isdark
-                                          ? const Color(0xff1C2D35)
-                                          : Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                widget.rede.listMessages[index]
-                                                    .user,
-                                                style: TextStyle(
-                                                  color: Color(
-                                                    widget
-                                                        .rede
-                                                        .listMessages[index]
-                                                        .color,
-                                                  ),
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 15),
-                                            child: Text(
-                                              widget.rede.listMessages[index]
-                                                  .mensagem,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                color: currentTheme.isdark
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 5,
-                                  bottom: 2,
-                                  child: Text(
-                                    widget.rede.listMessages[index].time,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  );
-                },
-              ),
+              ListMessages(aux: aux, widget: widget, user: user),
               const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: currentTheme.isdark
-                            ? const Color(0xff1C2D35)
-                            : Colors.white,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: TextFormField(
-                          onChanged: ((value) => setState(() {
-                                isMic = value.isEmpty ? true : false;
-                              })),
-                          controller: _controller,
-                          style: TextStyle(
-                            color: currentTheme.isdark
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Mensagem',
-                            hintStyle: TextStyle(
-                              color: currentTheme.isdark
-                                  ? const Color(0xff8097A1)
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xff03AA82),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                      child: IconButton(
-                        onPressed: (() {
-                          chat.isServer ? sendMessageServer() : sendMessage();
-                        }),
-                        icon: Icon(
-                          isMic ? Icons.mic : Icons.send,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+              InputChat(
+                controller: _controller,
+                isMic: isMic,
+                chat: chat,
+                sendMessage: sendMessage,
+                sendMessageServer: sendMessageServer,
               ),
             ],
           ),
