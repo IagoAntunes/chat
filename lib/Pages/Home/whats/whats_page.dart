@@ -90,7 +90,7 @@ class _WhatsPageState extends State<WhatsPage> {
                               ),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(defaultPadding),
                               child: Icon(
                                 Icons.group,
                                 color: currentTheme.isdark
@@ -159,7 +159,7 @@ class _WhatsPageState extends State<WhatsPage> {
                         );
                       }),
                     ),
-                  )
+                  ),
                 ],
               ),
             )),

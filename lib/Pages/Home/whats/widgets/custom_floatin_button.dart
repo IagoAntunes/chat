@@ -5,7 +5,7 @@ import 'package:socketfront/Providers/user_provider.dart';
 import '../../../../Models/rede_model.dart';
 import '../../../../Models/user_model.dart';
 import '../../../../Config/config.dart';
-import '../../../create_group.dart';
+import '../../group/create_group.dart';
 
 class CustomFloatingButton extends StatefulWidget {
   const CustomFloatingButton({
@@ -40,7 +40,7 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
                 children: [
                   //Conteudo
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(defaultPadding),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -117,9 +117,9 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
                                   Radius.circular(10),
                                 ),
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
+                              child: Padding(
+                                padding: EdgeInsets.all(defaultPadding),
+                                child: const Text(
                                   'Entrar Sala',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -157,9 +157,9 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton> {
                                   Radius.circular(10),
                                 ),
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
+                              child: Padding(
+                                padding: EdgeInsets.all(defaultPadding),
+                                child: const Text(
                                   'Criar Sala',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(

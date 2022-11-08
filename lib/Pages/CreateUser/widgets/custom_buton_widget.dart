@@ -46,7 +46,7 @@ class ButtonNext extends StatelessWidget {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(defaultPadding),
           child: Text(isSelected ? 'Login' : 'Next'),
         ),
       ),

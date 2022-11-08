@@ -16,3 +16,5 @@ List<int> listColors = [
   0xffffa500,
   0xffffff00
 ];
+
+double defaultPadding = 8.0;

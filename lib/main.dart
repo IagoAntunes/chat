@@ -6,17 +6,19 @@ import 'package:socketfront/Providers/theme_provider.dart';
 import 'Providers/user_provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-        create: (context) => UserProvider(),
-      ),
-      ChangeNotifierProvider(
-        create: (context) => ThemeProvider(),
-      )
-    ],
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,12 +27,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Socket Chat',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          primaryColorLight: Colors.green,
-        ),
-        home: const CreateUserPage());
+      debugShowCheckedModeBanner: false,
+      title: 'Socket Chat',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        primaryColorLight: Colors.green,
+      ),
+      home: const CreateUserPage(),
+    );
   }
 }

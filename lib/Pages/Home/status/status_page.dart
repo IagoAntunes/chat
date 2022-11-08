@@ -21,7 +21,7 @@ class StatusPage extends StatefulWidget {
 
 class _StatusPageState extends State<StatusPage> {
   final User user = userProv.getUser;
-  Chat chat = chatProv.getChat;
+  final Chat chat = chatProv.getChat;
 
   @override
   void initState() {

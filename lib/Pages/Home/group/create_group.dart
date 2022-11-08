@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:socketfront/Config/config.dart';
 import 'package:socketfront/Widgets/input_widget.dart';
 
-import '../Models/rede_model.dart';
+import '../../../Models/rede_model.dart';
 
 class CreateRoomPage extends StatefulWidget {
   const CreateRoomPage({super.key});
@@ -101,7 +101,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
         padding: const EdgeInsets.only(bottom: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(defaultPadding),
             child: Container(
               decoration: BoxDecoration(
                   color: currentTheme.isdark
@@ -115,9 +115,9 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                       Radius.circular(20),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
+                  child: Padding(
+                    padding: EdgeInsets.all(defaultPadding),
+                    child: const Icon(
                       Icons.camera_enhance,
                       color: Colors.white,
                     ),

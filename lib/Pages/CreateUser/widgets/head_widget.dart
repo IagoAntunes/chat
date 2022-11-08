@@ -5,9 +5,9 @@ import 'package:socketfront/Providers/theme_provider.dart';
 import '../../../Config/config.dart';
 
 class Head extends StatefulWidget {
-  Head({Key? key, required this.isDark}) : super(key: key);
+  Head({Key? key, required this.value}) : super(key: key);
 
-  bool isDark;
+  ThemeProvider value;
 
   @override
   State<Head> createState() => _HeadState();
@@ -30,8 +30,9 @@ class _HeadState extends State<Head> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 26,
-                    color:
-                        widget.isDark ? Colors.white : const Color(0xff333333),
+                    color: widget.value.isdark
+                        ? Colors.white
+                        : const Color(0xff333333),
                   ),
                 ),
               ),
@@ -40,18 +41,20 @@ class _HeadState extends State<Head> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
-                  color: widget.isDark ? Colors.grey : const Color(0xff333333),
+                  color: widget.value.isdark
+                      ? Colors.grey
+                      : const Color(0xff333333),
                 ),
               ),
             ],
           ),
           IconButton(
             onPressed: (() {
-              Provider.of<ThemeProvider>(context, listen: false).switchTheme();
+              widget.value.switchTheme();
             }),
             icon: Icon(
-              widget.isDark ? Icons.dark_mode : Icons.light_mode,
-              color: widget.isDark ? Colors.white : Colors.black,
+              widget.value.isdark ? Icons.dark_mode : Icons.light_mode,
+              color: widget.value.isdark ? Colors.white : Colors.black,
             ),
           ),
         ],

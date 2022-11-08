@@ -29,7 +29,6 @@ class _TabBarDemoState extends State<TabBarDemo> {
   User user = userProv.getUser;
   IO.Socket? _socket;
   Chat chat = chatProv.getChat;
-  List<RedeModel> listRedes = [];
   void connect3() {
     _socket!.onConnect((data) {
       print('Connected');

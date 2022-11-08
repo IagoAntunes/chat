@@ -1,4 +1,4 @@
-# socketfront
+# Socket Chat Flutter
 
 A new Flutter project.
 
