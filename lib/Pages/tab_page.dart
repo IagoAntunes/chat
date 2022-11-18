@@ -17,7 +17,7 @@ class TabBarDemo extends StatefulWidget {
   TabBarDemo({super.key});
   final RedeModel rede = RedeModel(
     porta: 111,
-    host: '111',
+    host: '',
     listMessages: [],
     usersOnline: [],
   );

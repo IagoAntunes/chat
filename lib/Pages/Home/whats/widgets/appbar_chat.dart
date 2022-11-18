@@ -27,9 +27,14 @@ class AppBarChat extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () {
           if (socket != null) {
             socket!.close();
-            Navigator.pop(context);
+            socket!.destroy();
+            Navigator.maybePop(context);
           }
           if (chat.isServer) {
+            Navigator.pop(context);
+            // widget.socket.disconnect();
+          }
+          if (!chat.isServer) {
             Navigator.pop(context);
             // widget.socket.disconnect();
           }

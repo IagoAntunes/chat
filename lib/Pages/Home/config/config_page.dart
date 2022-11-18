@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socketfront/Pages/CreateUser/create_user_page.dart';
 import 'package:socketfront/Config/config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socketfront/Pages/Home/config/widgets/disconnect_button_widget.dart';

@@ -112,7 +112,9 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
     if (!chat.isServer) {
-      connect();
+      if (widget.rede.host.isNotEmpty) {
+        connect();
+      }
     }
     print(widget.rede.listMessages.length);
   }

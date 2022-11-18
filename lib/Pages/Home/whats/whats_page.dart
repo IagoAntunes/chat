@@ -31,7 +31,9 @@ class _WhatsPageState extends State<WhatsPage> {
   @override
   void initState() {
     if (user.listRedes.isEmpty) {
-      user.listRedes.add(widget.rede);
+      if (chat.isServer) {
+        user.listRedes.add(widget.rede);
+      }
     }
 
     super.initState();
