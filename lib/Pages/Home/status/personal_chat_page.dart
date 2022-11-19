@@ -99,7 +99,7 @@ class PersonalPageState extends State<PersonalPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Username'),
+            Text(widget.user.user),
             Row(
               children: [
                 const Icon(Icons.call),

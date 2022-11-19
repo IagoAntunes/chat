@@ -76,7 +76,7 @@ class _WhatsPageState extends State<WhatsPage> {
                             setState(() {});
                           }),
                           title: Text(
-                            'Grupo 1',
+                            'Geral',
                             style: TextStyle(
                                 color: currentTheme.isdark
                                     ? Colors.white
@@ -111,13 +111,22 @@ class _WhatsPageState extends State<WhatsPage> {
                                             .mensagem
                                             .length >
                                         20
-                                    ? user
-                                        .listRedes[index]
-                                        .listMessages[user.listRedes[index]
-                                                .listMessages.length -
-                                            1]
-                                        .mensagem
-                                        .substring(0, 20)
+                                    ? (user
+                                            .listRedes[index]
+                                            .listMessages[user.listRedes[index]
+                                                    .listMessages.length -
+                                                1]
+                                            .mensagem
+                                            .substring(0, 20)
+                                            .contains('uImage')
+                                        ? 'imagem'
+                                        : user
+                                            .listRedes[index]
+                                            .listMessages[user.listRedes[index]
+                                                    .listMessages.length -
+                                                1]
+                                            .mensagem
+                                            .substring(0, 20))
                                     : user
                                         .listRedes[index]
                                         .listMessages[user.listRedes[index]

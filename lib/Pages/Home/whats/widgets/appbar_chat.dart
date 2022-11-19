@@ -47,7 +47,7 @@ class AppBarChat extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Username'),
+          const Text('Geral'),
           Row(
             children: [
               const Icon(Icons.call),

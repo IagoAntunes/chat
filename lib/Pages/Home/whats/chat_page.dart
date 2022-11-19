@@ -12,14 +12,23 @@ import '../../../Models/chat_model.dart';
 import '../../../Models/user_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../../Models/user_private_model.dart';
 import 'widgets/appbar_chat.dart';
 import 'widgets/input_chat_widget.dart';
 import 'widgets/list_messages_widget.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key, required this.rede, this.socket});
+  const ChatPage({
+    super.key,
+    required this.rede,
+    this.socket,
+    this.user,
+    this.isPrivate = false,
+  });
   final IO.Socket? socket;
   final RedeModel rede;
+  final UserPrivate? user;
+  final bool isPrivate;
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -34,6 +43,13 @@ class _ChatPageState extends State<ChatPage> {
   bool isConnected = false;
   Socket? socket;
   Chat chat = chatProv.getChat;
+  String? image;
+  MessageModel message = MessageModel(
+    mensagem: '',
+    user: userProv.getUser.username,
+    time: DateTime.now().toString().substring(11, 16).toString(),
+    color: userProv.getUser.color,
+  );
 
   //OLD CONNECT SERVER
   void connect() async {
@@ -95,6 +111,8 @@ class _ChatPageState extends State<ChatPage> {
           );
         });
       }
+      print(widget.rede.listMessages[0].mensagem
+          .substring(6, widget.rede.listMessages[0].mensagem.length));
     });
     widget.socket!.on('online', (data) {
       if (mounted) {
@@ -132,14 +150,21 @@ class _ChatPageState extends State<ChatPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListMessages(aux: aux, widget: widget, user: user),
+              ListMessages(
+                aux: aux,
+                widget: widget,
+                user: user,
+                isPrivate: widget.isPrivate,
+              ),
               const SizedBox(height: 24),
               InputChat(
                 controller: _controller,
                 isMic: isMic,
                 chat: chat,
                 sendMessage: sendMessage,
-                sendMessageServer: sendMessageServer,
+                sendMessageServer:
+                    widget.isPrivate ? sendMessagePrivate : sendMessageServer,
+                message: message,
               ),
             ],
           ),
@@ -151,16 +176,53 @@ class _ChatPageState extends State<ChatPage> {
   void sendMessageServer() {
     if (_controller.text.isNotEmpty) {
       widget.socket!.emit('message', {
-        'msg': _controller.text.trim(),
+        'msg': message.mensagem,
         'user': user.username,
         'time': DateTime.now().toString().substring(11, 16).toString(),
         'color': user.color,
       });
       _controller.clear();
     }
+    _controller.text = '';
+  }
+
+  void sendMessagePrivate() {
+    setState(() {
+      widget.user!.listMessages.add(
+        MessageModel(
+          mensagem: message.mensagem,
+          user: chat.user.username,
+          time: DateTime.now().toString().substring(11, 16).toString(),
+          color: chat.user.color,
+        ),
+      );
+    });
+
+    widget.socket!.emit("private message", {
+      'msg': message.mensagem,
+      'to': widget.user!.userId,
+      'time': DateTime.now().toString().substring(11, 16).toString(),
+      'color': user.color,
+    });
+    _controller.text = '';
   }
 
   void sendMessage() {
+    if (_controller.text.isNotEmpty) {
+      var req = {};
+      req['user'] = user.username;
+      req['msg'] = _controller.text;
+      req['time'] = DateTime.now().toString().substring(11, 16);
+      req['color'] = user.color;
+      print(DateTime.now().toString().substring(11, 16));
+      if (socket != null) {
+        socket!.write(json.encode(req));
+      }
+      _controller.text = '';
+    }
+  }
+
+  void sendImage() {
     if (_controller.text.isNotEmpty) {
       var req = {};
       req['user'] = user.username;

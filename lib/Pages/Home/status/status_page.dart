@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socketfront/Pages/Home/status/personal_chat_page.dart';
+import 'package:socketfront/Pages/Home/whats/chat_page.dart';
 
 import '../../../Models/chat_model.dart';
 import '../../../Models/rede_model.dart';
@@ -53,12 +54,19 @@ class _StatusPageState extends State<StatusPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((context) => PersonalPage(
-                          rede: widget.rede,
-                          socket: widget.socket!,
-                          user: widget.rede.usersOnline![index],
-                        )),
-                  ),
+                      builder: ((context) => ChatPage(
+                            rede: widget.rede,
+                            socket: widget.socket,
+                            isPrivate: true,
+                            user: widget.rede.usersOnline![index],
+                          ))
+
+                      // PersonalPage(
+                      //       rede: widget.rede,
+                      //       socket: widget.socket!,
+                      //       user: widget.rede.usersOnline![index],
+                      //     )),
+                      ),
                 );
               },
             );
