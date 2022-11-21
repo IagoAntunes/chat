@@ -27,97 +27,104 @@ class _CreateUserPageState extends State<CreateUserPage> {
             child: Scaffold(
               backgroundColor:
                   value.isdark ? const Color(0xff333333) : Colors.white,
-              body: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Head(
-                    value: value,
-                  ),
-                  const FotoUser(),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        CustomInput(
-                          controllerDescription: controllerUser,
-                          hintText: 'Usuario',
-                          icon: Icons.people,
-                          value: value.isdark,
-                        ),
-                        CustomInput(
-                          controllerDescription: controllerDescription,
-                          hintText: 'Descricao',
-                          icon: Icons.description,
-                          value: value.isdark,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: SizedBox(
-                            height: size.height * 0.05,
-                            child: ListView.separated(
-                              separatorBuilder: ((context, index) =>
-                                  const SizedBox(
-                                    width: 20,
-                                  )),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: listColors.length,
-                              itemBuilder: ((context, index) {
-                                return GestureDetector(
-                                  onTap: (() {
-                                    setState(() {
-                                      indexSelected = index;
-                                    });
-                                  }),
-                                  child: Container(
-                                    height: size.height * 0.02,
-                                    width: size.width * 0.07,
-                                    decoration: BoxDecoration(
-                                      color: Color(listColors[index]),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      border: Border.all(
-                                        width: 2,
-                                        color: index == indexSelected
-                                            ? Colors.black
-                                            : Colors.black26,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }),
-                            ),
-                          ),
-                        ),
-                        Row(
+              body: SingleChildScrollView(
+                child: SizedBox(
+                  height: size.height,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Head(
+                        value: value,
+                      ),
+                      const FotoUser(),
+                      Expanded(
+                        child: Column(
                           children: [
-                            Checkbox(
-                              value: isSelected,
-                              onChanged: (value) {
-                                setState(() {
-                                  isSelected = !isSelected;
-                                });
-                              },
+                            CustomInput(
+                              controllerDescription: controllerUser,
+                              hintText: 'Usuario',
+                              icon: Icons.people,
+                              value: value.isdark,
                             ),
-                            Text(
-                              'Server',
-                              style: TextStyle(
-                                color:
-                                    value.isdark ? Colors.white : Colors.black,
+                            CustomInput(
+                              controllerDescription: controllerDescription,
+                              hintText: 'Descricao',
+                              icon: Icons.description,
+                              value: value.isdark,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: SizedBox(
+                                height: size.height * 0.05,
+                                child: ListView.separated(
+                                  separatorBuilder: ((context, index) =>
+                                      const SizedBox(
+                                        width: 20,
+                                      )),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: listColors.length,
+                                  itemBuilder: ((context, index) {
+                                    return GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          indexSelected = index;
+                                        });
+                                      }),
+                                      child: Container(
+                                        height: size.height * 0.02,
+                                        width: size.width * 0.07,
+                                        decoration: BoxDecoration(
+                                          color: Color(listColors[index]),
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                          border: Border.all(
+                                            width: 2,
+                                            color: index == indexSelected
+                                                ? Colors.black
+                                                : Colors.black26,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
                               ),
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: isSelected,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSelected = !isSelected;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  'Server',
+                                  style: TextStyle(
+                                    color: value.isdark
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ButtonNext(
+                              controllerUser: controllerUser,
+                              controllerDescription: controllerDescription,
+                              listColors: listColors,
+                              indexSelected: indexSelected,
+                              isSelected: isSelected,
                             ),
                           ],
                         ),
-                        ButtonNext(
-                          controllerUser: controllerUser,
-                          controllerDescription: controllerDescription,
-                          listColors: listColors,
-                          indexSelected: indexSelected,
-                          isSelected: isSelected,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           )),
