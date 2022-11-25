@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socketfront/Pages/CreateUser/create_user_page.dart';
+import 'package:socketfront/Providers/chat_provider.dart';
 import 'package:socketfront/Providers/theme_provider.dart';
 
 import 'Providers/user_provider.dart';
@@ -14,6 +15,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatProvider(),
         )
       ],
       child: const MyApp(),

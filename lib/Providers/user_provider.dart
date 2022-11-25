@@ -9,7 +9,7 @@ class UserProvider extends ChangeNotifier {
     return user;
   }
 
-  void setUser(User userSet) {
+  void setUser(User? userSet) {
     user = userSet;
     notifyListeners();
   }

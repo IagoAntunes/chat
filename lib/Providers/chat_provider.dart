@@ -8,7 +8,7 @@ class ChatProvider extends ChangeNotifier {
     return chat;
   }
 
-  void setChat(Chat chatSet) {
+  void setChat(Chat? chatSet) {
     chat = chatSet;
   }
 }

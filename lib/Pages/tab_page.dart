@@ -27,7 +27,7 @@ class TabBarDemo extends StatefulWidget {
 
 class _TabBarDemoState extends State<TabBarDemo> {
   User user = userProv.getUser;
-  IO.Socket? _socket;
+  IO.Socket? _socket = null;
   Chat chat = chatProv.getChat;
   void connect3() {
     _socket!.onConnect((data) {
@@ -91,16 +91,24 @@ class _TabBarDemoState extends State<TabBarDemo> {
   @override
   void initState() {
     super.initState();
+
     currentTheme.addListener(() {
       print('Change Theme');
       if (mounted) setState(() {});
     });
     if (chat.isServer == true) {
-      _socket = IO.io(
-        'http://192.168.5.213:4590',
-        IO.OptionBuilder().setTransports(['websocket']).setQuery(
-            {'username': userProv.user!.username.toString()}).build(),
-      );
+      User user = userProv.getUser;
+      setState(() {
+        _socket = null;
+        _socket = IO.io(
+          'http://${chat.host}:${chat.port}',
+          IO.OptionBuilder().setTransports(['websocket']).setQuery(
+              {'username': user.username.toString()}).build(),
+        );
+      });
+
+      print(_socket!.query);
+      print(user.username.toString());
       connect3();
     }
   }

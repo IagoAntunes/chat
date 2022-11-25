@@ -10,6 +10,8 @@ class ButtonNext extends StatelessWidget {
     Key? key,
     required this.controllerUser,
     required this.controllerDescription,
+    required this.controllerHost,
+    required this.controllerPort,
     required this.listColors,
     required this.indexSelected,
     required this.isSelected,
@@ -17,6 +19,8 @@ class ButtonNext extends StatelessWidget {
 
   final TextEditingController controllerUser;
   final TextEditingController controllerDescription;
+  final TextEditingController controllerHost;
+  final TextEditingController controllerPort;
   final List<int> listColors;
   final int indexSelected;
   final bool isSelected;
@@ -24,7 +28,9 @@ class ButtonNext extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        if (controllerUser.text.isNotEmpty) {
+        if (controllerUser.text.isNotEmpty &&
+            controllerHost.text.isNotEmpty &&
+            controllerPort.text.isNotEmpty) {
           User user = User(
             username: controllerUser.text,
             description: controllerDescription.text,
@@ -34,7 +40,12 @@ class ButtonNext extends StatelessWidget {
             listMessages: [],
           );
           userProv.setUser(user);
-          Chat chat = Chat(user: user, isServer: isSelected);
+          Chat chat = Chat(
+            user: user,
+            isServer: isSelected,
+            host: controllerHost.text,
+            port: controllerPort.text,
+          );
           chatProv.setChat(chat);
           Navigator.of(context).push(
             MaterialPageRoute(

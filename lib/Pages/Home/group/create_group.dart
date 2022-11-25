@@ -138,13 +138,13 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
             ),
           ),
           CustomInput(
-            controllerDescription: controllerPort,
+            controller: controllerPort,
             hintText: 'PORT:',
             icon: Icons.door_sliding,
             value: currentTheme.isdark,
           ),
           CustomInput(
-            controllerDescription: controllerHost,
+            controller: controllerHost,
             hintText: 'HOST:',
             icon: Icons.access_alarm,
             value: currentTheme.isdark,

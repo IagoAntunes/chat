@@ -5,14 +5,14 @@ import '../Config/config.dart';
 class CustomInput extends StatelessWidget {
   CustomInput(
       {Key? key,
-      required this.controllerDescription,
+      required this.controller,
       required this.hintText,
       required this.icon,
       required this.value})
       : super(key: key);
 
-  final TextEditingController controllerDescription;
-  IconData icon;
+  final TextEditingController controller;
+  IconData? icon;
   String? hintText;
   bool value;
   @override
@@ -20,7 +20,7 @@ class CustomInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(14),
       child: TextField(
-        controller: controllerDescription,
+        controller: controller,
         style: TextStyle(
           color: value ? Colors.white : Colors.grey,
         ),

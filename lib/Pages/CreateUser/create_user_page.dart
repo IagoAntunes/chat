@@ -17,8 +17,17 @@ class CreateUserPage extends StatefulWidget {
 class _CreateUserPageState extends State<CreateUserPage> {
   TextEditingController controllerUser = TextEditingController();
   TextEditingController controllerDescription = TextEditingController();
+
+  TextEditingController controllerHost = TextEditingController();
+  TextEditingController controllerPort = TextEditingController();
+
   int indexSelected = 0;
   bool isSelected = false;
+  List<String> listImages = [
+    "https://cdn-icons-png.flaticon.com/512/3940/3940417.png",
+    "https://cdn-icons-png.flaticon.com/512/4139/4139981.png",
+    "https://cdn-icons-png.flaticon.com/512/6997/6997662.png"
+  ];
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -36,18 +45,34 @@ class _CreateUserPageState extends State<CreateUserPage> {
                       Head(
                         value: value,
                       ),
-                      const FotoUser(),
+                      SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: listImages.length,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              height: 100,
+                              width: 90,
+                              child: Image.network(
+                                listImages[index],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                       Expanded(
                         child: Column(
                           children: [
                             CustomInput(
-                              controllerDescription: controllerUser,
+                              controller: controllerUser,
                               hintText: 'Usuario',
                               icon: Icons.people,
                               value: value.isdark,
                             ),
                             CustomInput(
-                              controllerDescription: controllerDescription,
+                              controller: controllerDescription,
                               hintText: 'Descricao',
                               icon: Icons.description,
                               value: value.isdark,
@@ -92,6 +117,29 @@ class _CreateUserPageState extends State<CreateUserPage> {
                                 ),
                               ),
                             ),
+                            Visibility(
+                              visible: isSelected,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 60),
+                                child: Column(
+                                  children: [
+                                    CustomInput(
+                                      hintText: 'Host:',
+                                      icon: null,
+                                      value: value.isdark,
+                                      controller: controllerHost,
+                                    ),
+                                    CustomInput(
+                                      hintText: 'Porta:',
+                                      icon: null,
+                                      value: value.isdark,
+                                      controller: controllerPort,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             Row(
                               children: [
                                 Checkbox(
@@ -115,6 +163,8 @@ class _CreateUserPageState extends State<CreateUserPage> {
                             ButtonNext(
                               controllerUser: controllerUser,
                               controllerDescription: controllerDescription,
+                              controllerHost: controllerHost,
+                              controllerPort: controllerPort,
                               listColors: listColors,
                               indexSelected: indexSelected,
                               isSelected: isSelected,
