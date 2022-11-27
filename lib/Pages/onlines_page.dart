@@ -11,11 +11,11 @@ class OnlinePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: currentTheme.isdark
             ? const Color(0xff1C2D35)
-            : const Color(0xff075e55),
+            : const Color(0xff008069),
         title: const Text('Pessoas Online'),
       ),
       backgroundColor: currentTheme.isdark
-          ? const Color(0xff0F1C24)
+          ? const Color(0xff121B22)
           : const Color.fromARGB(255, 237, 238, 190),
       body: ListView.builder(
         itemCount: rede.usersOnline!.length,

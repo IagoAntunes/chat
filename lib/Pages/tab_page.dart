@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:socketfront/Models/user_private_model.dart';
+import 'package:socketfront/Pages/Home/callPages/calls_page.dart';
 import 'package:socketfront/Pages/Home/status/status_page.dart';
 import 'package:socketfront/Pages/Home/whats/whats_page.dart';
 import 'package:socketfront/Config/config.dart';
@@ -141,15 +142,7 @@ class _TabBarDemoState extends State<TabBarDemo> {
                     children: [
                       WhatsPage(rede: widget.rede, socket: _socket),
                       StatusPage(rede: widget.rede, socket: _socket),
-                      Column(
-                        children: const [
-                          Icon(
-                            Icons.call,
-                            size: 120,
-                          ),
-                          Text('Sem Chamadas!')
-                        ],
-                      ),
+                      CallsPage(),
                     ],
                   ),
                 ),

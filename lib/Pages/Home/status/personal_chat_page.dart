@@ -95,7 +95,7 @@ class PersonalPageState extends State<PersonalPage> {
         ),
         backgroundColor: currentTheme.isdark
             ? const Color(0xff1C2D35)
-            : const Color(0xff075e55),
+            : const Color(0xff008069),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -122,7 +122,7 @@ class PersonalPageState extends State<PersonalPage> {
         ),
       ),
       backgroundColor: currentTheme.isdark
-          ? const Color(0xff0F1C24)
+          ? const Color(0xff121B22)
           : const Color.fromARGB(255, 237, 238, 190),
       body: SafeArea(
         child: Padding(
@@ -275,7 +275,7 @@ class PersonalPageState extends State<PersonalPage> {
                     padding: const EdgeInsets.only(left: 5),
                     child: Container(
                       decoration: const BoxDecoration(
-                        color: Color(0xff03AA82),
+                        color: Color(0xff008069),
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
                         ),

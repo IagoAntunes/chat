@@ -4,20 +4,24 @@ import 'package:flutter/material.dart';
 
 import '../../../../Config/config.dart';
 import '../../../../Models/chat_model.dart';
+import '../../../../Models/user_model.dart';
+import '../../../../Models/user_private_model.dart';
 import '../../../onlines_page.dart';
 import '../chat_page.dart';
 
 class AppBarChat extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarChat({
-    Key? key,
-    required this.socket,
-    required this.chat,
-    required this.widget,
-  }) : super(key: key);
+  const AppBarChat(
+      {Key? key,
+      required this.socket,
+      required this.chat,
+      required this.widget,
+      this.user})
+      : super(key: key);
 
   final Socket? socket;
   final Chat chat;
   final ChatPage widget;
+  final UserPrivate? user;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -43,11 +47,11 @@ class AppBarChat extends StatelessWidget implements PreferredSizeWidget {
       ),
       backgroundColor: currentTheme.isdark
           ? const Color(0xff1C2D35)
-          : const Color(0xff075e55),
+          : const Color(0xff008069),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Geral'),
+          Text(widget.user == null ? 'Geral' : widget.user!.user),
           Row(
             children: [
               const Icon(Icons.call),

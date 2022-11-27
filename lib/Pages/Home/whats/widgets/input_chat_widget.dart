@@ -120,7 +120,7 @@ class _InputChatState extends State<InputChat> {
           padding: const EdgeInsets.only(left: 5),
           child: Container(
             decoration: const BoxDecoration(
-              color: Color(0xff03AA82),
+              color: Color(0xff008069),
               borderRadius: BorderRadius.all(
                 Radius.circular(20),
               ),

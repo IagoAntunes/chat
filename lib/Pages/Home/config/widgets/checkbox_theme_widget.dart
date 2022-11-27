@@ -23,12 +23,11 @@ class _CheckBoxThemeState extends State<CheckBoxTheme> {
         children: [
           Icon(
             currentTheme.isdark ? Icons.dark_mode : Icons.light_mode,
-            color: currentTheme.isdark ? Colors.white : Colors.black,
+            color: currentTheme.isdark ? Colors.white : Colors.grey,
           ),
           Checkbox(
-            fillColor: MaterialStateProperty.all(
-                currentTheme.isdark ? Colors.white : Colors.black),
-            value: widget.isChecked,
+            fillColor: MaterialStateProperty.all(Color(0xff03AA82)),
+            value: currentTheme.isdark ? true : false,
             onChanged: ((value) {
               setState(
                 () {

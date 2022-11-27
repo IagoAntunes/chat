@@ -12,46 +12,72 @@ class ButtonNext extends StatelessWidget {
     required this.controllerDescription,
     required this.controllerHost,
     required this.controllerPort,
-    required this.listColors,
-    required this.indexSelected,
     required this.isSelected,
+    required this.selectedColor,
+    required this.indexImage,
   }) : super(key: key);
 
   final TextEditingController controllerUser;
   final TextEditingController controllerDescription;
   final TextEditingController controllerHost;
   final TextEditingController controllerPort;
-  final List<int> listColors;
-  final int indexSelected;
   final bool isSelected;
+  final Color selectedColor;
+  final int indexImage;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        if (controllerUser.text.isNotEmpty &&
-            controllerHost.text.isNotEmpty &&
-            controllerPort.text.isNotEmpty) {
-          User user = User(
-            username: controllerUser.text,
-            description: controllerDescription.text,
-            color: listColors[indexSelected],
-            listRedes: [],
-            isOnline: true,
-            listMessages: [],
-          );
-          userProv.setUser(user);
-          Chat chat = Chat(
-            user: user,
-            isServer: isSelected,
-            host: controllerHost.text,
-            port: controllerPort.text,
-          );
-          chatProv.setChat(chat);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: ((context) => TabBarDemo()),
-            ),
-          );
+        if (isSelected) {
+          if (controllerUser.text.isNotEmpty &&
+              controllerHost.text.isNotEmpty &&
+              controllerPort.text.isNotEmpty) {
+            User user = User(
+                username: controllerUser.text,
+                description: controllerDescription.text,
+                color: selectedColor.value,
+                listRedes: [],
+                isOnline: true,
+                listMessages: [],
+                indexImage: indexImage);
+            userProv.setUser(user);
+            Chat chat = Chat(
+              user: user,
+              isServer: isSelected,
+              host: controllerHost.text,
+              port: controllerPort.text,
+            );
+            chatProv.setChat(chat);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: ((context) => TabBarDemo()),
+              ),
+            );
+          }
+        } else {
+          if (controllerUser.text.isNotEmpty) {
+            User user = User(
+                username: controllerUser.text,
+                description: controllerDescription.text,
+                color: selectedColor.value,
+                listRedes: [],
+                isOnline: true,
+                listMessages: [],
+                indexImage: indexImage);
+            userProv.setUser(user);
+            Chat chat = Chat(
+              user: user,
+              isServer: isSelected,
+              host: controllerHost.text,
+              port: controllerPort.text,
+            );
+            chatProv.setChat(chat);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: ((context) => TabBarDemo()),
+              ),
+            );
+          }
         }
       },
       child: Text(isSelected ? 'Login' : 'Next'),

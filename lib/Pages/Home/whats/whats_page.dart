@@ -43,10 +43,10 @@ class _WhatsPageState extends State<WhatsPage> {
   Widget build(BuildContext context) {
     TextEditingController controllerPorta = TextEditingController();
     TextEditingController controllerHost = TextEditingController();
-
+    //Color(0xff121B22)
     return Scaffold(
       backgroundColor:
-          currentTheme.isdark ? const Color(0xff0F1C24) : Colors.white,
+          currentTheme.isdark ? const Color(0xff121B22) : Colors.white,
       body: Consumer<UserProvider>(
         builder: ((context, value, child) => SafeArea(
               child: Column(
@@ -78,9 +78,12 @@ class _WhatsPageState extends State<WhatsPage> {
                           title: Text(
                             'Geral',
                             style: TextStyle(
-                                color: currentTheme.isdark
-                                    ? Colors.white
-                                    : Colors.black),
+                              color: currentTheme.isdark
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           leading: Container(
                             decoration: BoxDecoration(
@@ -150,19 +153,15 @@ class _WhatsPageState extends State<WhatsPage> {
                                                 .listMessages.length -
                                             1]
                                         .time
-                                    : '',
+                                    : DateTime.now()
+                                        .toString()
+                                        .substring(0, 10)
+                                        .replaceAll("-", "/"),
                                 style: TextStyle(
                                   color: currentTheme.isdark
                                       ? Colors.white
                                       : Colors.black,
-                                ),
-                              ),
-                              Text(
-                                'Hoje',
-                                style: TextStyle(
-                                  color: currentTheme.isdark
-                                      ? Colors.white
-                                      : Colors.black,
+                                  fontSize: 12,
                                 ),
                               ),
                             ],

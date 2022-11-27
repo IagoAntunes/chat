@@ -33,7 +33,7 @@ class _StatusPageState extends State<StatusPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          currentTheme.isdark ? const Color(0xff0F1C24) : Colors.white,
+          currentTheme.isdark ? const Color(0xff121B22) : Colors.white,
       body: Visibility(
         visible: widget.socket != null,
         child: ListView.builder(
@@ -51,23 +51,27 @@ class _StatusPageState extends State<StatusPage> {
                 ),
               ),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: ((context) => ChatPage(
-                            rede: widget.rede,
-                            socket: widget.socket,
-                            isPrivate: true,
-                            user: widget.rede.usersOnline![index],
-                          ))
+                try {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => ChatPage(
+                              rede: widget.rede,
+                              socket: widget.socket,
+                              isPrivate: true,
+                              user: widget.rede.usersOnline![index],
+                            ))
 
-                      // PersonalPage(
-                      //       rede: widget.rede,
-                      //       socket: widget.socket!,
-                      //       user: widget.rede.usersOnline![index],
-                      //     )),
-                      ),
-                );
+                        // PersonalPage(
+                        //       rede: widget.rede,
+                        //       socket: widget.socket!,
+                        //       user: widget.rede.usersOnline![index],
+                        //     )),
+                        ),
+                  );
+                } catch (e) {
+                  Navigator.pop(context);
+                }
               },
             );
           }),

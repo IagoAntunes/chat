@@ -93,10 +93,10 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
         title: const Text('Criar Sala'),
         backgroundColor: currentTheme.isdark
             ? const Color(0xff1C2D35)
-            : const Color(0xff075e55),
+            : const Color(0xff008069),
       ),
       backgroundColor:
-          currentTheme.isdark ? const Color(0xff0F1C24) : Colors.white,
+          currentTheme.isdark ? const Color(0xff121B22) : Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -105,7 +105,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
             child: Container(
               decoration: BoxDecoration(
                   color: currentTheme.isdark
-                      ? const Color(0xff0F1C24)
+                      ? const Color(0xff121B22)
                       : Colors.white),
               child: ListTile(
                 leading: Container(

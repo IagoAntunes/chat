@@ -14,8 +14,8 @@ class HeadWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: currentTheme.isdark
-            ? const Color(0xff1C2D35)
-            : const Color(0xff075e55),
+            ? const Color(0xff1F2C34)
+            : const Color(0xff008069),
       ),
       child: Padding(
         padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
@@ -44,9 +44,11 @@ class HeadWidget extends StatelessWidget {
                           : Colors.white,
                     ),
                     PopupMenuButton(
-                      icon: const Icon(
-                        Icons.menu,
-                        color: Colors.white,
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: currentTheme.isdark
+                            ? const Color(0xffABABAB)
+                            : Colors.white,
                       ),
                       shape: RoundedRectangleBorder(
                         side:
@@ -74,7 +76,7 @@ class HeadWidget extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: const [
-                              Text('Configurações'),
+                              Text('Settings'),
                               Icon(Icons.toll_outlined)
                             ],
                           ),
@@ -89,13 +91,13 @@ class HeadWidget extends StatelessWidget {
               padding: const EdgeInsets.only(top: 5),
               child: TabBar(
                 labelColor: currentTheme.isdark
-                    ? const Color(0xff03AA82)
+                    ? const Color(0xff008069)
                     : Colors.white,
                 indicator: UnderlineTabIndicator(
                   borderSide: BorderSide(
                     width: 4.0,
                     color: currentTheme.isdark
-                        ? const Color(0xff03AA82)
+                        ? const Color(0xff008069)
                         : Colors.white,
                   ),
                 ),
@@ -109,7 +111,7 @@ class HeadWidget extends StatelessWidget {
                 tabs: const [
                   Tab(
                     child: Text(
-                      'CONVERSAS',
+                      'CHATS',
                     ),
                   ),
                   Tab(
@@ -119,7 +121,7 @@ class HeadWidget extends StatelessWidget {
                   ),
                   Tab(
                     child: Text(
-                      'CHAMADAS',
+                      'CALLS',
                     ),
                   ),
                 ],

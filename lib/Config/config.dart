@@ -16,5 +16,10 @@ List<int> listColors = [
   0xffffa500,
   0xffffff00
 ];
+List<String> listImages = [
+  "https://cdn-icons-png.flaticon.com/512/3940/3940417.png",
+  "https://cdn-icons-png.flaticon.com/512/4139/4139981.png",
+  "https://cdn-icons-png.flaticon.com/512/6997/6997662.png"
+];
 
 double defaultPadding = 8.0;

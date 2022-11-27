@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:socketfront/Models/message_model.dart';
 import 'package:socketfront/Models/rede_model.dart';
 
@@ -6,6 +8,7 @@ class User {
   String username;
   String description;
   int color;
+  int indexImage;
   List<RedeModel> listRedes;
   bool isOnline;
   List<MessageModel> listMessages;
@@ -16,6 +19,7 @@ class User {
     required this.listRedes,
     required this.isOnline,
     required this.listMessages,
+    required this.indexImage,
     this.userID = '',
   });
 }

@@ -140,9 +140,10 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarChat(socket: socket, chat: chat, widget: widget),
+      appBar: AppBarChat(
+          socket: socket, chat: chat, widget: widget, user: widget.user),
       backgroundColor: currentTheme.isdark
-          ? const Color(0xff0F1C24)
+          ? const Color(0xff121B22)
           : const Color.fromARGB(255, 237, 238, 190),
       body: SafeArea(
         child: Padding(

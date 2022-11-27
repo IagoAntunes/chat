@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:socketfront/Providers/user_provider.dart';
 
+import '../../../../Models/chat_model.dart';
 import '../../../../Models/rede_model.dart';
 import '../../../../Models/user_model.dart';
 import '../../../../Config/config.dart';
@@ -24,172 +25,180 @@ class CustomFloatingButton extends StatefulWidget {
 }
 
 class _CustomFloatingButtonState extends State<CustomFloatingButton> {
+  Chat chat = chatProv.getChat;
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: const Color(0xff03AA82),
-      onPressed: (() async {
-        showDialog(
-          context: context,
-          builder: ((context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  //Conteudo
-                  Padding(
-                    padding: EdgeInsets.all(defaultPadding),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+      onPressed: chat.isServer
+          ? null
+          : (() async {
+              showDialog(
+                context: context,
+                builder: ((context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        //Titulo
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            'Grupo',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: TextField(
-                            controller: widget.controllerHost,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'HOST',
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 20)),
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(20),
-                            ),
-                          ),
-                          child: TextField(
-                            controller: widget.controllerPorta,
-                            decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'PORTA',
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 20)),
-                          ),
-                        ),
+                        //Conteudo
+                        Padding(
+                          padding: EdgeInsets.all(defaultPadding),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              //Titulo
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10),
+                                child: Text(
+                                  'Grupo',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: TextField(
+                                  controller: widget.controllerHost,
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'HOST',
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 20)),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(width: 1),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
+                                ),
+                                child: TextField(
+                                  controller: widget.controllerPorta,
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'PORTA',
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 20)),
+                                ),
+                              ),
 
-                        GestureDetector(
-                          onTap: (() {
-                            if (widget.controllerPorta.text.isNotEmpty &&
-                                widget.controllerHost.text.isNotEmpty) {
-                              RedeModel rede = RedeModel(
-                                  porta: int.parse(widget.controllerPorta.text),
-                                  host: widget.controllerHost.text,
-                                  listMessages: [],
-                                  usersOnline: []);
-                              setState(() {
-                                widget.user.listRedes.add(rede);
-                              });
-                              Provider.of<UserProvider>(context, listen: false)
-                                  .setUser(widget.user);
-                              Navigator.pop(context, rede);
-                            }
-                          }),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(defaultPadding),
-                                child: const Text(
-                                  'Entrar Sala',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 5,
+                              GestureDetector(
+                                onTap: (() {
+                                  if (widget.controllerPorta.text.isNotEmpty &&
+                                      widget.controllerHost.text.isNotEmpty) {
+                                    RedeModel rede = RedeModel(
+                                        porta: int.parse(
+                                            widget.controllerPorta.text),
+                                        host: widget.controllerHost.text,
+                                        listMessages: [],
+                                        usersOnline: []);
+                                    setState(() {
+                                      widget.user.listRedes.add(rede);
+                                    });
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
+                                        .setUser(widget.user);
+                                    Navigator.pop(context, rede);
+                                  }
+                                }),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(defaultPadding),
+                                      child: const Text(
+                                        'Entrar Sala',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 5,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                              GestureDetector(
+                                onTap: (() async {
+                                  RedeModel? rede =
+                                      await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const CreateRoomPage()),
+                                    ),
+                                  );
+                                  if (rede != null) {
+                                    setState(() {
+                                      widget.user.listRedes.add(rede);
+                                    });
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
+                                        .setUser(widget.user);
+                                  }
+                                }),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 1,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(defaultPadding),
+                                      child: const Text(
+                                        'Criar Sala',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 5,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: (() async {
-                            RedeModel? rede = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: ((context) => const CreateRoomPage()),
-                              ),
-                            );
-                            if (rede != null) {
-                              setState(() {
-                                widget.user.listRedes.add(rede);
-                              });
-                              Provider.of<UserProvider>(context, listen: false)
-                                  .setUser(widget.user);
-                            }
-                          }),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(defaultPadding),
-                                child: const Text(
-                                  'Criar Sala',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 5,
-                                  ),
-                                ),
-                              ),
-                            ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(Icons.close),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: const Icon(Icons.close),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }),
-        );
-      }),
+                  );
+                }),
+              );
+            }),
       child: Icon(
         Icons.chat,
         color: currentTheme.isdark ? Colors.white : Colors.white,
