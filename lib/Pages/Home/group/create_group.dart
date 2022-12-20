@@ -27,7 +27,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
 
   Future<void> iniServer(List<String> arguments) async {
     if (arguments.isEmpty) {
-      var filename = Platform.script.toFilePath().split('/').last; // wtf
+      var filename = Platform.script.toFilePath().split('/').last;
       print('Usage: $filename <port>');
       return;
     }
